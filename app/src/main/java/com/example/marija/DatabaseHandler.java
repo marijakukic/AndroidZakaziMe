@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-// u ovoj klasi kucamo sve metode koje se ticu pristupa bazi
+// u ovoj klasi kucamo sve metode koje se ticu pristupa bazi za tabelu user
 //mozda u buducnosti mozemo razdvojiti da svaki model ima svoju klasu za pristup bazi
 public class DatabaseHandler extends SQLiteOpenHelper{
 
@@ -23,6 +23,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String COL3="korisnickoIme";
     private static final String COL4="email";
     private static final String COL5="password";
+    private static final String COL6="prezime";
 
     public DatabaseHandler(Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -30,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-            String createTable ="CREATE TABLE "+TABLE_NAME+" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT,"+COL3+" TEXT,"+COL4+" TEXT,"+COL5+" TEXT)";
+            String createTable ="CREATE TABLE "+TABLE_NAME+" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT,"+COL3+" TEXT,"+COL4+" TEXT,"+COL5+" TEXT,"+COL6+" TEXT)";
             db.execSQL(createTable);
     }
 
@@ -40,7 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean addUser(String name,String korname,String email,String pass){
+    public boolean addUser(String name,String korname,String email,String pass,String prezime){
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -48,14 +49,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         contentValues.put(COL3,korname);
         contentValues.put(COL4,email);
         contentValues.put(COL5,pass);
+        contentValues.put(COL6,prezime);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
-        if(result == -1){
-            return false;
-        }else{
-            return true;
-        }
+        return result != -1;
     }
 
     public List<User> getAllUsers() {
@@ -77,6 +75,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                     newUser.setKoriscnickoIme(cursor.getString(cursor.getColumnIndex(COL3)));
                     newUser.setEmail(cursor.getString(cursor.getColumnIndex(COL4)));
                     newUser.setPass(cursor.getString(cursor.getColumnIndex(COL5)));
+                    newUser.setPrezime(cursor.getString(cursor.getColumnIndex(COL6)));
                     users.add(newUser);
                 } while(cursor.moveToNext());
             }

@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DetailViewActivity"
+            android:label="@string/title_activity_detail_view"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".MojaZakazivanjaActivity"
             android:label="@string/title_activity_moja_zakazivanja"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ListItemActivity"
             android:label="Belle Femme fizerski salon" />

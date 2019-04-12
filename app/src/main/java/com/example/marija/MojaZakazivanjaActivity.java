@@ -57,7 +57,7 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_moja_zakazivanja2);
 
         String[] data = new String[]{"Action","Action","Action","Action"};
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -66,10 +66,10 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -203,9 +203,9 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
                 LayoutInflater layoutInflater = LayoutInflater.from(getContext());
                 convertView = layoutInflater.inflate(layout,parent,false);
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.iv = (ImageView)convertView.findViewById(R.id.imageView2);
-                viewHolder.tv = (TextView)convertView.findViewById(R.id.editText);
-                viewHolder.b = (Button)convertView.findViewById(R.id.button);
+                viewHolder.iv = convertView.findViewById(R.id.imageView2);
+                viewHolder.tv = convertView.findViewById(R.id.editText);
+                viewHolder.b = convertView.findViewById(R.id.button);
                 viewHolder.b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

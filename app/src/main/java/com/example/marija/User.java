@@ -7,15 +7,17 @@ public class User {
     private String koriscnickoIme;
     private String email;
     private String pass;
+    private String prezime;
 
     public User(){}
 
-    public User(long ID,String Name,String koriscnickoIme,String email,String pass) {
+    public User(long ID,String Name,String koriscnickoIme,String email,String pass,String prezime) {
         this.ID = ID;
         this.Name = Name;
         this.koriscnickoIme = koriscnickoIme;
         this.email = email;
         this.pass = pass;
+        this.prezime = prezime;
     }
 
     public long getID() {
@@ -56,5 +58,13 @@ public class User {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
     }
 }

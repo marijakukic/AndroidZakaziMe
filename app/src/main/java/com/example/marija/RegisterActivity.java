@@ -1,10 +1,12 @@
 package com.example.marija;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
@@ -32,15 +34,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setupActionBar();
+        mEmailView = findViewById(R.id.emailRegister);
+        btnAdd = findViewById(R.id.registrujSeBtn);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.emailRegister);
-        btnAdd = (Button)findViewById(R.id.registrujSeBtn);
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordConfirmedView = (EditText) findViewById(R.id.confirmedPass);
-        mImeView = (EditText)findViewById(R.id.ime) ;
-        mPrezimeView =(EditText)findViewById(R.id.prezime);
-        mKorisnickoImeView=(EditText)findViewById(R.id.korisnickoIme);
+        mPasswordView = findViewById(R.id.password);
+        mPasswordConfirmedView = findViewById(R.id.confirmedPass);
+        mImeView = findViewById(R.id.ime);
+        mPrezimeView = findViewById(R.id.prezime);
+        mKorisnickoImeView= findViewById(R.id.korisnickoIme);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -60,7 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String entrykorname=mKorisnickoImeView.getText().toString();
                 String entryMail = mEmailView.getText().toString();
                 String entryPass = mPasswordView.getText().toString();
-                AddData(entryname,entrykorname,entryMail,entryPass);
+                String entryPrezime = mPrezimeView.getText().toString();
+                AddData(entryname,entrykorname,entryMail,entryPass,entryPass);
             }
         });
 
@@ -163,11 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isPassConfirmed(String password, String confirmedPass){
 
-        if(password.equals(confirmedPass)){
-            return true;
-        }else{
-            return false;
-        }
+        return password.equals(confirmedPass);
     }
 
     //ova metoda proverava da li korisnik sa tim korisnickimImenom postoji
@@ -187,13 +186,13 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
     }
 
-    public void AddData(String newime,String newKorIme,String email,String pass){
+    public void AddData(String newime,String newKorIme,String email,String pass,String prezime){
         if(isExsistingUser(newKorIme)){
 
             Toast.makeText(this,"korisnik postoji",Toast.LENGTH_SHORT).show();
 
         }else {
-            boolean insert = mDataBaseHelper.addUser(newime, newKorIme,email,pass);
+            boolean insert = mDataBaseHelper.addUser(newime, newKorIme,email,pass,prezime);
 
             if (insert) {
 
@@ -202,6 +201,24 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Nesto nije u redu sa bazom", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

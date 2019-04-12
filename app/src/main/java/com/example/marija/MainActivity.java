@@ -40,11 +40,12 @@ public class MainActivity extends AppCompatActivity
         final String[] data = new String[]{"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
         // ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,
         //      android.R.id.text1,data);
-        lv = (ListView)findViewById(R.id.listView);
+        lv = findViewById(R.id.listView);
         //final String[] values = new String[]{"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
        // ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,
           //      android.R.id.text1,data);
         //lv.setAdapter(listAdapter);
+
         lv.setAdapter(new MyClassAdapter(this,R.layout.activity_list_item,data));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         array_spinner[0]="Novi Sad";
         array_spinner[1]="Beograd";
         array_spinner[2]="Nis";
-        Spinner s = (Spinner) findViewById(R.id.Spinner01);
+        Spinner s = findViewById(R.id.Spinner01);
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, array_spinner);
         s.setAdapter(adapter);
@@ -69,11 +70,11 @@ public class MainActivity extends AppCompatActivity
         array_spinner1[0]="Lepota";
         array_spinner1[1]="Obrazovanje";
         array_spinner1[2]="Zdravlje";
-        Spinner ss = (Spinner) findViewById(R.id.Spinner02);
+        Spinner ss = findViewById(R.id.Spinner02);
         ArrayAdapter adapter1 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, array_spinner1);
         ss.setAdapter(adapter1);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
        // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,19 +86,19 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 
         }*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -173,9 +174,9 @@ public class MainActivity extends AppCompatActivity
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             convertView = layoutInflater.inflate(layout,parent,false);
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.iv = (ImageView)convertView.findViewById(R.id.imageView2);
-            viewHolder.tv = (TextView)convertView.findViewById(R.id.editText);
-            viewHolder.b = (Button)convertView.findViewById(R.id.button);
+            viewHolder.iv = convertView.findViewById(R.id.imageView2);
+            viewHolder.tv = convertView.findViewById(R.id.editText);
+            viewHolder.b = convertView.findViewById(R.id.button);
             viewHolder.b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
