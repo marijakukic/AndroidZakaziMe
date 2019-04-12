@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
@@ -53,8 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String entry = mKorisnickoImeView.getText().toString();
-                AddData(entry);
+                String entryname = mImeView.getText().toString();
+                String entrykorname=mKorisnickoImeView.getText().toString();
+                String entryMail = mEmailView.getText().toString();
+                String entryPass = mPasswordView.getText().toString();
+                AddData(entryname,entrykorname,entryMail,entryPass);
             }
         });
 
@@ -164,13 +170,37 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void AddData(String newE){
+    //ova metoda proverava da li korisnik sa tim korisnickimImenom postoji
+    //i sa tim mailom
+    //vraca false ako ne postoji
+    //vraca true ako postoji
+    public boolean isExsistingUser(String newKorIme){
 
-        boolean insert = mDataBaseHelper.addData(newE);
-        if(insert){
-            Toast.makeText(this,"Uspeh",Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this,"Neuspeh",Toast.LENGTH_SHORT).show();
+            List<User> korisnici = new ArrayList<User>();
+            korisnici = mDataBaseHelper.getAllUsers();
+            for(int i=0;i<korisnici.size();i++){
+                if(korisnici.get(i).getKoriscnickoIme().equals(newKorIme)){
+                    return true;
+                }
+            }
+
+            return false;
+    }
+
+    public void AddData(String newime,String newKorIme,String email,String pass){
+        if(isExsistingUser(newKorIme)){
+
+            Toast.makeText(this,"korisnik postoji",Toast.LENGTH_SHORT).show();
+
+        }else {
+            boolean insert = mDataBaseHelper.addUser(newime, newKorIme,email,pass);
+
+            if (insert) {
+
+                Toast.makeText(this, "Korisnik uspesno unet", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Nesto nije u redu sa bazom", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

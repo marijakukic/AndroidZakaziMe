@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+  //da li postoji korisnik sa tim mailom
+    public boolean isExsistingUser(String email){
+
+        List<User> korisnici = new ArrayList<User>();
+        korisnici = mDataBaseHelper.getAllUsers();
+
+        for(int i=0;i<korisnici.size();i++){
+            if(korisnici.get(i).getEmail().equals(email)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+    // da li je dobra kombinacija pass i email
+    public boolean matchPassAndEmail(String email, String pass){
+
+        List<User> korisnici = new ArrayList<User>();
+        korisnici = mDataBaseHelper.getAllUsers();
+        for(int i=0;i<korisnici.size();i++){
+            if(korisnici.get(i).getEmail().equals(email)){
+                if (korisnici.get(i).getPass().equals(pass)) {
+                        return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -157,8 +190,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+
         boolean cancel = false;
         View focusView = null;
+        //zasto ne ulazi u ovu metodu?????????
+        if(isExsistingUser(email)==false){
+            mEmailView.setError(getString(R.string.emailnepostojeci));
+            cancel = true;
+            focusView = mEmailView;
+        }else{//ako korisnik postoji proveravamo kombinaciju da li je dobar pass
+            if(!matchPassAndEmail(email,password)) {
+                mPasswordView.setError(getString(R.string.passnepostojeci));
+                cancel = true;
+                focusView = mPasswordView;
+            }
+
+        }
+
+
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
