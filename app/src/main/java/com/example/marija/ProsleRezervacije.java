@@ -12,18 +12,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Termini extends Fragment {
+public class ProsleRezervacije extends Fragment {
 
-    String[] naslovi = {"Ponedeljak","Utorak","Sreda"};
-    String[] termini ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
+    String[] naslovi = {"Masaza","Cas srpskog"};
+    String[] termini ={"13.03.2019. 12:00","14.03.2019. 13:00"};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.termini,container,false);
-        ListView lv = (ListView)view.findViewById(R.id.listViewTermini);
+        View view = inflater.inflate(R.layout.proslerezervacije,container,false);
+        ListView lv = (ListView)view.findViewById(R.id.listViewProsle);
         CustomAdapter customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
+
         return view;
     }
 
@@ -46,18 +47,17 @@ public class Termini extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = getLayoutInflater().inflate(R.layout.activity_list_item_zakazivanja_termini, null);
+            convertView = getLayoutInflater().inflate(R.layout.activity_list_item_proslozak, null);
 
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
-            Button zakazi = (Button)convertView.findViewById(R.id.zakazi);
-            zakazi.setOnClickListener(new View.OnClickListener() {
+            Button oceni = (Button)convertView.findViewById(R.id.recenzija);
+            oceni.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openDialog();
                 }
             });
-
             naslov.setText(naslovi[position]);
             termin.setText(termini[position]);
 
@@ -67,6 +67,8 @@ public class Termini extends Fragment {
     }
 
     public void openDialog(){
+        DialogOceni dialogOceni = new DialogOceni();
+        dialogOceni.show(getFragmentManager(),"Recenzija");
 
     }
 }

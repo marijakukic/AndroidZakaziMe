@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -25,19 +26,18 @@ import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ListView lv;
-
-
+    String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
+    int[] images = {R.drawable.frizerski_salon, R.drawable.privatnicasovi,R.drawable.skolajezika};
+    String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final String[] data = new String[]{"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
+
         // ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,
         //      android.R.id.text1,data);
         lv = findViewById(R.id.listView);
@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity
           //      android.R.id.text1,data);
         //lv.setAdapter(listAdapter);
 
-        lv.setAdapter(new MyClassAdapter(this,R.layout.activity_list_item,data));
+        //lv.setAdapter(new MyClassAdapter(this,R.layout.activity_list_item,data));
+        CustomAdapter customAdapter = new CustomAdapter();
+        lv.setAdapter(customAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,9 +69,9 @@ public class MainActivity extends AppCompatActivity
         s.setAdapter(adapter);
 
         String[] array_spinner1 = new String[3];
-        array_spinner1[0]="Lepota";
-        array_spinner1[1]="Obrazovanje";
-        array_spinner1[2]="Zdravlje";
+        array_spinner1[0]="Sve";
+        array_spinner1[1]="Lepota";
+        array_spinner1[2]="Obrazovanje";
         Spinner ss = findViewById(R.id.Spinner02);
         ArrayAdapter adapter1 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, array_spinner1);
@@ -77,14 +79,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-     /*   fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -155,44 +149,39 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public class ViewHolder {
 
-        private ImageView iv;
-        private TextView tv;
-        private Button b;
+    class CustomAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return images.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = getLayoutInflater().inflate(R.layout.activity_list_item,null);
+            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
+            TextView name =(TextView)convertView.findViewById(R.id.name);
+            TextView description =(TextView)convertView.findViewById(R.id.description);
+
+            imageView.setImageResource(images[position]);
+            name.setText(data[position]);
+            description.setText(opisi[position]);
+
+
+            return convertView;
+        }
     }
-    private class MyClassAdapter extends ArrayAdapter<String>{
-        private int layout;
-        public MyClassAdapter(Context context, int resource, String[] objects) {
-            super(context, resource, objects);
-            layout = resource;
-        }
-    @Override
-    public View getView(final int position, @Nullable View convertView, ViewGroup parent) {
-        ViewHolder mainViewHolder = null;
-        if(convertView==null){
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(layout,parent,false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.iv = convertView.findViewById(R.id.imageView2);
-            viewHolder.tv = convertView.findViewById(R.id.editText);
-            viewHolder.b = convertView.findViewById(R.id.button);
-            viewHolder.b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(),"Pritisnuto dugme na poziciji" +position,Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),ListItemActivity.class));
-                }
-            });
-            convertView.setTag(viewHolder);
-        }else{
-            mainViewHolder = (ViewHolder)convertView.getTag();
-            mainViewHolder.tv.setText(getItem(position));
-
-
-        }
-        return convertView;
-    }}
 
 
 }

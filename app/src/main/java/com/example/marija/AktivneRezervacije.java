@@ -12,18 +12,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Termini extends Fragment {
+public class AktivneRezervacije extends Fragment {
 
-    String[] naslovi = {"Ponedeljak","Utorak","Sreda"};
+    String[] naslovi = {"Belle Femme Frizer","Piling lica","Cas matematike"};
     String[] termini ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.termini,container,false);
-        ListView lv = (ListView)view.findViewById(R.id.listViewTermini);
+        View view = inflater.inflate(R.layout.aktivnerezervacije,container,false);
+        ListView lv = (ListView)view.findViewById(R.id.listViewAktivne);
         CustomAdapter customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
+
         return view;
     }
 
@@ -46,17 +48,11 @@ public class Termini extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = getLayoutInflater().inflate(R.layout.activity_list_item_zakazivanja_termini, null);
+            convertView = getLayoutInflater().inflate(R.layout.activity_list_item_zakazivanja, null);
 
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
-            Button zakazi = (Button)convertView.findViewById(R.id.zakazi);
-            zakazi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openDialog();
-                }
-            });
+            Button otkazi = (Button)convertView.findViewById(R.id.otkazi);
 
             naslov.setText(naslovi[position]);
             termin.setText(termini[position]);
@@ -64,9 +60,5 @@ public class Termini extends Fragment {
 
             return convertView;
         }
-    }
-
-    public void openDialog(){
-
     }
 }
