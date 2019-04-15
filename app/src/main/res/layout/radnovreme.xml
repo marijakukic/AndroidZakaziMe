@@ -14,17 +14,36 @@
 
     <TextView
         android:id="@+id/tab3"
-        android:layout_width="183dp"
-        android:layout_height="101dp"
-        android:text="Tab3"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="229dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="left"
+        android:text="@string/radno_vreme"
+        android:textAlignment="gravity" />
+
+    <TextView
+        android:id="@+id/tab6"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="left"
+        android:text="@string/radno_vremeSubota"
+        android:textAlignment="gravity" />
+
+    <TextView
+        android:id="@+id/tab68"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="left"
+        android:text="@string/radno_vremeNedelja"
+        android:textAlignment="gravity"
+        android:layout_marginBottom = "12dp"/>
 
     <Button
-        android:id="@+id/btn3"
-        android:layout_width="168dp"
-        android:layout_height="77dp"
-        android:text="Tab3"
-        tools:layout_editor_absoluteX="58dp"
-        tools:layout_editor_absoluteY="392dp" />
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cenovnik"
+        android:layout_gravity="left"
+        />
+
+
 </LinearLayout>
