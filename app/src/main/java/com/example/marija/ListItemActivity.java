@@ -37,7 +37,7 @@ public class ListItemActivity extends AppCompatActivity {
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new OpisTab(),"Opis");
         adapter.addFragment(new RadnoVreme(),"Radno vreme");
-        adapter.addFragment(new Termini2(),"Termini");
+        adapter.addFragment(new Termini(),"Termini");
         adapter.addFragment(new Recenzije(),"Recenzije");
         viewPager.setAdapter(adapter);
     }
