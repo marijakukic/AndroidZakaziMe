@@ -57,13 +57,15 @@ public class RegisterActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String entryname = mImeView.getText().toString();
-                String entrykorname=mKorisnickoImeView.getText().toString();
-                String entryMail = mEmailView.getText().toString();
-                String entryPass = mPasswordView.getText().toString();
-                String entryPrezime = mPrezimeView.getText().toString();
-                AddData(entryname,entrykorname,entryMail,entryPass,entryPass);
+                if (attemptLogin()) {
+                    String entryname = mImeView.getText().toString();
+                    String entrykorname = mKorisnickoImeView.getText().toString();
+                    String entryMail = mEmailView.getText().toString();
+                    String entryPass = mPasswordView.getText().toString();
+                    String entryPrezime = mPrezimeView.getText().toString();
+                    AddData(entryname, entrykorname, entryMail, entryPass, entryPass);
+                    //startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                }
             }
         });
 
@@ -78,11 +80,12 @@ public class RegisterActivity extends AppCompatActivity {
         registerFormView = findViewById(R.id.registerForm);
     }
 
-    private void attemptLogin() {
+    private boolean attemptLogin() {
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
+        boolean dozvoli = true;
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -99,12 +102,15 @@ public class RegisterActivity extends AppCompatActivity {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
+            dozvoli = false;
+
         }
 
         if(TextUtils.isEmpty(ime)){
             mImeView.setError(getString(R.string.error_field_required));
             focusView = mImeView;
             cancel = true;
+            dozvoli = false;
 
         }
 
@@ -112,6 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
             mPrezimeView.setError(getString(R.string.error_field_required));
             focusView = mPrezimeView;
             cancel = true;
+            dozvoli = false;
 
         }
 
@@ -119,6 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
             mKorisnickoImeView.setError(getString(R.string.error_field_required));
             focusView = mKorisnickoImeView;
             cancel = true;
+            dozvoli = false;
 
         }
 
@@ -126,11 +134,13 @@ public class RegisterActivity extends AppCompatActivity {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
+            dozvoli = false;
 
         }else if(!isPassConfirmed(password,confimedPass)){
             mPasswordView.setError(getString(R.string.poklapanje_pass));
             focusView = mPasswordView;
             cancel = true;
+            dozvoli = false;
         }
 
         // Check for a valid email address.
@@ -138,10 +148,12 @@ public class RegisterActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
+            dozvoli = false;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
+            dozvoli = false;
         }
 
         if (cancel) {
@@ -150,8 +162,10 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         }
+
+        return dozvoli;
     }
 
     private boolean isEmailValid(String email) {

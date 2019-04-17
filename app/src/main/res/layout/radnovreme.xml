@@ -38,7 +38,7 @@
         android:layout_marginBottom = "12dp"/>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/cenovnik"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cenovnik"

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ListView lv;
     String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
-    int[] images = {R.drawable.frizerski_salon, R.drawable.privatnicasovi,R.drawable.skolajezika};
+    int[] images = {R.drawable.frizerski_salon, R.drawable.skolajezika,R.drawable.privatnicasovi};
     String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
