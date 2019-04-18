@@ -11,6 +11,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".ListItemActivity">
 
+
+
     <ListView
         android:id="@+id/listViewProsle"
         android:layout_width="wrap_content"
