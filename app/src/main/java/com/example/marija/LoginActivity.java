@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +71,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
+    public boolean ret;
+    boolean ret2;
+    String globalniPass;
+    boolean cancel = false;
+    View focusView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +107,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+
     }
 
     private void populateAutoComplete() {
@@ -146,33 +162,78 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
   //da li postoji korisnik sa tim mailom
-    public boolean isExsistingUser(String email){
+    public void isExsistingUser(String email){
 
-        List<User> korisnici = new ArrayList<User>();
-        korisnici = mDataBaseHelper.getAllUsers();
+        Query query = FirebaseDatabase.getInstance().getReference("Korisnici")
+                .orderByChild("email").equalTo(email);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        for(int i=0;i<korisnici.size();i++){
-            if(korisnici.get(i).getEmail().equals(email)){
-                return true;
-            }
-        }
 
-        return false;
-    }
-    // da li je dobra kombinacija pass i email
-    public boolean matchPassAndEmail(String email, String pass){
 
-        List<User> korisnici = new ArrayList<User>();
-        korisnici = mDataBaseHelper.getAllUsers();
-        for(int i=0;i<korisnici.size();i++){
-            if(korisnici.get(i).getEmail().equals(email)){
-                if (korisnici.get(i).getPass().equals(pass)) {
-                        return true;
+                if(!dataSnapshot.exists()){
+                    mEmailView.setError(getString(R.string.emailnepostojeci));
+                    cancel = true;
+                    focusView = mEmailView;
+
+
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        if (cancel) {
+            focusView.requestFocus();
         }
 
-        return false;
+
+    }
+    // da li je dobra kombinacija pass i email
+    public void matchPassAndEmail(String email, String pass){
+        globalniPass = pass;
+        Query query = FirebaseDatabase.getInstance().getReference("Korisnici")
+                .orderByChild("email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        User u = new User();
+                        u = dataSnapshot1.getValue(User.class);
+                        if(u.getPass().equals(globalniPass)) {
+
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        }else{
+                            mPasswordView.setError(getString(R.string.passnepostojeci));
+                            cancel = true;
+                            focusView = mPasswordView;
+                        }
+                    }
+
+                }else{
+                    mPasswordView.setError(getString(R.string.passnepostojeci));
+                    cancel = true;
+                    focusView = mPasswordView;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        if (cancel) {
+            focusView.requestFocus();
+        }
+
+
 
     }
 
@@ -190,21 +251,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String password = mPasswordView.getText().toString();
 
 
-        boolean cancel = false;
-        View focusView = null;
-        //zasto ne ulazi u ovu metodu?????????
-        if(isExsistingUser(email)==false){
-            mEmailView.setError(getString(R.string.emailnepostojeci));
-            cancel = true;
-            focusView = mEmailView;
-        }else{//ako korisnik postoji proveravamo kombinaciju da li je dobar pass
-            if(!matchPassAndEmail(email,password)) {
-                mPasswordView.setError(getString(R.string.passnepostojeci));
-                cancel = true;
-                focusView = mPasswordView;
-            }
 
-        }
+        isExsistingUser(email);
+        matchPassAndEmail(email,password);
+
 
 
 
@@ -238,14 +288,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            //ovo ispod sam zakomentarisala, a ovo na 194 liniji sam dodala
-            //mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
 
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            //showProgress(true);
+
+            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
     }
 
