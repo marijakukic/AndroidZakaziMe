@@ -1,5 +1,6 @@
 package com.example.marija;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -55,8 +56,7 @@ public class ListItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            return true;
+            super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

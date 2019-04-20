@@ -3,6 +3,7 @@ package com.example.marija;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,29 +25,79 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ListView lv;
-    String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
-    int[] images = {R.drawable.frizerski_salon, R.drawable.skolajezika,R.drawable.privatnicasovi};
-    String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
+    private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private ImageView imageView;
+    private TextView name;
+    private TextView description;
+    private ArrayList<Usluga> list;
+    private ArrayAdapter<Usluga> adapter;
+    //String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
+    //int[] images = {R.drawable.frizerski_salon, R.drawable.skolajezika,R.drawable.privatnicasovi};
+    //String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        list = new ArrayList<Usluga>();
+
+        Usluga u1 = new Usluga("Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
+        Usluga u2 = new Usluga("Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje");
+        Usluga u3 = new Usluga("Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Obrazovanje");
+        List<Usluga> usluge = new ArrayList<Usluga>();
+        usluge.add(u1);
+        usluge.add(u2);
+        usluge.add(u3);
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Usluge");
+        FirebaseDatabase.getInstance().getReference("Usluge").removeValue();
+        addUslugaToFireBase(usluge);
+        Query query = FirebaseDatabase.getInstance().getReference("Usluge");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Usluga u = ds.getValue(Usluga.class);
+                    /*imageView.setImageResource(u.getSlika());
+                    name.setText(u.getNaziv());
+                    description.setText(u.getOpis());*/
+                    list.add(u);
 
 
-        // ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,
-        //      android.R.id.text1,data);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         lv = findViewById(R.id.listView);
-        //final String[] values = new String[]{"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
-       // ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,
-          //      android.R.id.text1,data);
-        //lv.setAdapter(listAdapter);
-
-        //lv.setAdapter(new MyClassAdapter(this,R.layout.activity_list_item,data));
         CustomAdapter customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,6 +139,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void addUslugaToFireBase(List<Usluga> listaUsluga){
+
+
+        for(Usluga u : listaUsluga) {
+            databaseReference.push().setValue(u);
+        }
+
     }
 
     @Override
@@ -154,7 +214,8 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return images.length;
+
+            return list.size();
         }
 
         @Override
@@ -170,18 +231,22 @@ public class MainActivity extends AppCompatActivity
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = getLayoutInflater().inflate(R.layout.activity_list_item,null);
-            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
-            TextView name =(TextView)convertView.findViewById(R.id.name);
-            TextView description =(TextView)convertView.findViewById(R.id.description);
+              ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
+              TextView name =(TextView)convertView.findViewById(R.id.name);
+              TextView description =(TextView)convertView.findViewById(R.id.description);
 
-            imageView.setImageResource(images[position]);
-            name.setText(data[position]);
-            description.setText(opisi[position]);
+
+
+                        imageView.setImageResource(list.get(position).getSlika());
+                        name.setText(list.get(position).getNaziv());
+                        description.setText(list.get(position).getOpis());
 
 
             return convertView;
         }
     }
+
+
 
 
 }

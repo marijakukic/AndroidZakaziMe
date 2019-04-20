@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     String globalniPass;
     boolean cancel = false;
     View focusView = null;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         User u = new User();
                         u = dataSnapshot1.getValue(User.class);
                         if(u.getPass().equals(globalniPass)) {
-
+                            showProgress(true);
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         }else{
                             mPasswordView.setError(getString(R.string.passnepostojeci));
