@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "837322243274",
+    "firebase_url": "https://zakazimefirebasebaza.firebaseio.com",
+    "project_id": "zakazimefirebasebaza",
+    "storage_bucket": "zakazimefirebasebaza.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837322243274:android:f797425059a8b293",
+        "android_client_info": {
+          "package_name": "com.example.marija"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837322243274-0g1b7di40idvvumks4h74t2jei8vjj37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.marija",
+            "certificate_hash": "b79a65d81692e8baaef58d6e2a4dd1e0ef6ed612"
+          }
+        },
+        {
+          "client_id": "837322243274-q0kk16p3srtooc94voactqgq6vdqj57m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5_wdnzyxICtR0h7utkh7Yl2gq1EJwH-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837322243274-q0kk16p3srtooc94voactqgq6vdqj57m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
