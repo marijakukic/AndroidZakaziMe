@@ -1,10 +1,12 @@
 package com.example.marija;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
     private View registerFormView;
     private Button btnAdd;
     private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    String entryname ;
+    String entrykorname ;
+    String entryMail ;
+    String entryPass ;
+    String entryPrezime ;
+    private boolean korisnikPostoji;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,30 +72,75 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        registerFormView = findViewById(R.id.registerForm);
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Korisnici");
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               entryname = mImeView.getText().toString();
+               entrykorname = mKorisnickoImeView.getText().toString();
+               entryMail = mEmailView.getText().toString();
+               entryPass = mPasswordView.getText().toString();
+               entryPrezime = mPrezimeView.getText().toString();
+
                 if (attemptLogin()) {
-                    String entryname = mImeView.getText().toString();
-                    String entrykorname = mKorisnickoImeView.getText().toString();
-                    String entryMail = mEmailView.getText().toString();
-                    String entryPass = mPasswordView.getText().toString();
-                    String entryPrezime = mPrezimeView.getText().toString();
-                    AddData(entryname, entrykorname, entryMail, entryPass, entryPass);
+                    korisnikPostoji = true;
+                    Query query = FirebaseDatabase.getInstance().getReference("Korisnici")
+                            .orderByChild("email").equalTo(entryMail);
+
+                    query.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if( dataSnapshot.getChildrenCount() == 0) {
+                                                            addUserToFirebase();
+                                                            korisnikPostoji = AddData(entryname, entrykorname, entryMail, entryPass, entryPass);
+                                                            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                                                        }
+                                                            if(korisnikPostoji){
+                                                                Toast.makeText(RegisterActivity.this,"Korisnik postoji", Toast.LENGTH_SHORT).show();
+                                                                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+                                                            }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                    }
+
                     //startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 }
-            }
-        });
+            });
 
-       // Button mEmailSignInButton = (Button) findViewById(R.id.registrujSeBtn);
-       /* mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });*/
 
-        registerFormView = findViewById(R.id.registerForm);
+
+
+    }
+
+
+
+
+    private void addUserToFirebase() {
+        String entryname = mImeView.getText().toString();
+        String entrykorname = mKorisnickoImeView.getText().toString();
+        String entryMail = mEmailView.getText().toString();
+        String entryPass = mPasswordView.getText().toString();
+        String entryPrezime = mPrezimeView.getText().toString();
+
+
+
+        User u = new User(entryname,entrykorname,entryMail,entryPass,entryPrezime);
+
+        databaseReference.push().setValue(u);
+        //ne postavljamo id
+
+
+
+
     }
 
     private boolean attemptLogin() {
@@ -162,7 +225,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+
         }
 
         return dozvoli;
@@ -200,21 +263,20 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
     }
 
-    public void AddData(String newime,String newKorIme,String email,String pass,String prezime){
-        if(isExsistingUser(newKorIme)){
+    public boolean AddData(String newime,String newKorIme,String email,String pass,String prezime){
 
-            Toast.makeText(this,"korisnik postoji",Toast.LENGTH_SHORT).show();
-
-        }else {
             boolean insert = mDataBaseHelper.addUser(newime, newKorIme,email,pass,prezime);
 
             if (insert) {
 
                 Toast.makeText(this, "Korisnik uspesno unet", Toast.LENGTH_SHORT).show();
+                return false;
             } else {
-                Toast.makeText(this, "Nesto nije u redu sa bazom", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Nesto nije u redu sa bazom na telefonu", Toast.LENGTH_SHORT).show();
             }
-        }
+
+            return false;
+
     }
 
     private void setupActionBar() {

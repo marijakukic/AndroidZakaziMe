@@ -20,6 +20,14 @@ public class User {
         this.prezime = prezime;
     }
 
+    public User(String Name,String koriscnickoIme,String email,String pass,String prezime) {
+        this.Name = Name;
+        this.koriscnickoIme = koriscnickoIme;
+        this.email = email;
+        this.pass = pass;
+        this.prezime = prezime;
+    }
+
     public long getID() {
         return ID;
     }
