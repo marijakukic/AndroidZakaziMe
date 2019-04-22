@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marija.Models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +38,7 @@ public class ProsleRezervacije extends Fragment {
     List<Rezervacija> lista = new ArrayList<>();
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
+    private DatabaseHandler databaseHandler;
     String datum;
     String vreme;
     ListView lv;
@@ -52,7 +53,9 @@ public class ProsleRezervacije extends Fragment {
         lista = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
-        User u = new User("krr","krr","krr@","kkkkk","krr");
+        databaseHandler= new DatabaseHandler(getContext());
+        //User u = new User("krr","krr","krr@","kkkkk","krr");
+        User u = databaseHandler.findUser();
         currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
         String dateString = format.format( currentTime );
@@ -78,7 +81,7 @@ public class ProsleRezervacije extends Fragment {
                     Rezervacija r = ds.getValue(Rezervacija.class);
                     Date datumTermina=null;
                     try {
-                        datumTermina= new SimpleDateFormat("dd.MM.yyyy.").parse(r.getT().getDatum());
+                        datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(r.getT().getDatum()+" "+r.getT().getVreme());
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

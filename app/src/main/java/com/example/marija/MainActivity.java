@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.odjava){
+            mDataBaseHelper.deleteAll();
             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         }
 

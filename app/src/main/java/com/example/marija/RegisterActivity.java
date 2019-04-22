@@ -131,10 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
         String entryPass = mPasswordView.getText().toString();
         String entryPrezime = mPrezimeView.getText().toString();
 
-        if(entryMail.equals("sss@")) {
-            Usluga u = new Usluga(0, "Belle Femme Frizer", R.drawable.frizerski_salon, "Partizanskih baza 2", "Novi Sad", "Lepota");
-            Termin t = new Termin("22.04.2019.", "10:00", true);
-            Rezervacija r = new Rezervacija(2, u, t, true, "krr@");
+        if(entryMail.equals("tamara@")) {
+            Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje");
+            Termin t = new Termin("22.04.2019.", "15:00", true);
+            Rezervacija r = new Rezervacija(4, u4, t, true, "m@");
             AddRez(r.getEmailKorisnika());
             firebaseDatabase.getReference("Rezervacije").push().setValue(r);
 

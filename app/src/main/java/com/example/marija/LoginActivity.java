@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marija.Models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -177,8 +178,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
                 }else{
-                    User u = dataSnapshot.getValue(User.class);
+                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                        User u = ds.getValue(User.class);
+                        Toast.makeText(LoginActivity.this, u.getEmail(), Toast.LENGTH_SHORT).show();
 
+                            mDataBaseHelper.addUser(u.getName(), u.getKoriscnickoIme(), u.getEmail(), u.getPass(), u.getPrezime());
+
+                    }
 
 
 

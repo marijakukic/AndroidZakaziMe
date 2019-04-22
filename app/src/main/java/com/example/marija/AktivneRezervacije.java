@@ -42,7 +42,7 @@ public class AktivneRezervacije extends Fragment {
     List<Rezervacija> lista = new ArrayList<>();
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
+    private DatabaseHandler databaseHandler;
     String datum;
     String vreme;
     ListView lv;
@@ -57,11 +57,14 @@ public class AktivneRezervacije extends Fragment {
 
 
         lista = new ArrayList<>();
+        databaseHandler = new DatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
        lv = (ListView)view.findViewById(R.id.listViewAktivne);
         //ovde treba uzeti ulogovanog korisnika ali to ne radi
-        User u = new User("krr","krr","krr@","kkkkk","krr");
+       // User u = new User("krr","krr","krr@","kkkkk","krr");
+        User u = databaseHandler.findUser();
+        Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
         String dateString = format.format( currentTime );
