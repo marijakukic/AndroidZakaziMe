@@ -18,19 +18,88 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class ProsleRezervacije extends Fragment {
 
-    String[] naslovi = {"Masaza","Cas srpskog"};
-    String[] termini ={"13.03.2019. 12:00","14.03.2019. 13:00"};
+    List<Rezervacija> lista = new ArrayList<>();
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
+    String datum;
+    String vreme;
+    ListView lv;
+    Date datumDate;
+    Date currentTime;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.proslerezervacije,container,false);
-        ListView lv = (ListView)view.findViewById(R.id.listViewProsle);
-        CustomAdapter customAdapter = new CustomAdapter();
-        lv.setAdapter(customAdapter);
+         lv = (ListView)view.findViewById(R.id.listViewProsle);
+        lista = new ArrayList<>();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Rezervacije");
+        User u = new User("krr","krr","krr@","kkkkk","krr");
+        currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
+        String dateString = format.format( currentTime );
+        String [] datumivreme = dateString.split(" ");
+        datum = datumivreme[0];
+        vreme = datumivreme[1];
+
+
+
+        try {
+            datumDate = new SimpleDateFormat("dd.MM.yyyy.").parse(datum);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                .orderByChild("emailKorisnika").equalTo(u.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Rezervacija r = ds.getValue(Rezervacija.class);
+                    Date datumTermina=null;
+                    try {
+                        datumTermina= new SimpleDateFormat("dd.MM.yyyy.").parse(r.getT().getDatum());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(datumTermina.compareTo(currentTime)<0) {
+                        lista.add(r);
+                    }
+
+
+                }
+
+                CustomAdapter customAdapter =new CustomAdapter();
+                lv.setAdapter(customAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         return view;
@@ -40,7 +109,7 @@ public class ProsleRezervacije extends Fragment {
 
         @Override
         public int getCount() {
-            return naslovi.length;
+            return lista.size();
         }
 
         @Override
@@ -66,9 +135,9 @@ public class ProsleRezervacije extends Fragment {
                     openDialog();
                 }
             });
-            naslov.setText(naslovi[position]);
-            termin.setText(termini[position]);
 
+            naslov.setText(lista.get(position).getU().getNaziv());
+            termin.setText(lista.get(position).getT().getDatum());
 
             return convertView;
         }

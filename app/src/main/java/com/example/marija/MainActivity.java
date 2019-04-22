@@ -52,9 +52,7 @@ public class MainActivity extends AppCompatActivity
     private TextView description;
     private ArrayList<Usluga> list;
     private ArrayAdapter<Usluga> adapter;
-    //String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
-    //int[] images = {R.drawable.frizerski_salon, R.drawable.skolajezika,R.drawable.privatnicasovi};
-    //String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
+    private RezervacijeDatabaseHandler rezDataBaseHelper = new RezervacijeDatabaseHandler(this);
 
 
     @Override
@@ -62,13 +60,16 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = new ArrayList<Usluga>();
+        List<Usluga> usluge = new ArrayList<Usluga>();
 
         Usluga u1 = new Usluga("Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
-        Usluga u2 = new Usluga("Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje");
-        Usluga u3 = new Usluga("Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Obrazovanje");
-        List<Usluga> usluge = new ArrayList<Usluga>();
+        u1.setID(usluge.size());
         usluge.add(u1);
+        Usluga u2 = new Usluga("Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje");
+        u2.setID(usluge.size());
         usluge.add(u2);
+        Usluga u3 = new Usluga("Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Obrazovanje");
+        u3.setID(usluge.size());
         usluge.add(u3);
         FirebaseApp.initializeApp(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -82,9 +83,6 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Usluga u = ds.getValue(Usluga.class);
-                    /*imageView.setImageResource(u.getSlika());
-                    name.setText(u.getNaziv());
-                    description.setText(u.getOpis());*/
                     list.add(u);
 
 
@@ -145,7 +143,9 @@ public class MainActivity extends AppCompatActivity
 
 
         for(Usluga u : listaUsluga) {
-            databaseReference.push().setValue(u);
+
+             databaseReference.push().setValue(u);
+
         }
 
     }
@@ -169,15 +169,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.odjava){
+            mDataBaseHelper.deleteAll();
+            rezDataBaseHelper.deleteAll();
             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         }
 

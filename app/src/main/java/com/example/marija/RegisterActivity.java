@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private View registerFormView;
     private Button btnAdd;
     private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
+    private RezervacijeDatabaseHandler rezDataBaseHelper = new RezervacijeDatabaseHandler(this);
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     String entryname ;
@@ -131,11 +132,29 @@ public class RegisterActivity extends AppCompatActivity {
         String entryPass = mPasswordView.getText().toString();
         String entryPrezime = mPrezimeView.getText().toString();
 
+        if(entryMail.equals("sss@")) {
+            Usluga u = new Usluga(0, "Belle Femme Frizer", R.drawable.frizerski_salon, "Partizanskih baza 2", "Novi Sad", "Lepota");
+            Termin t = new Termin("22.04.2019.", "10:00", true);
+            Rezervacija r = new Rezervacija(2, u, t, true, "krr@");
+            AddRez(r.getEmailKorisnika());
+            firebaseDatabase.getReference("Rezervacije").push().setValue(r);
+
+        }/*
+            Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
+            Termin t1 = new Termin("24.05.2018.","12:00",true);
+            Rezervacija r1 = new Rezervacija(1,u1,t1,false,"sjj@");
+            AddRez(r1.getEmailKorisnika());
+            firebaseDatabase.getReference("Rezervacije").push().setValue(r1);
+
+
+        }*/
+
+
 
 
         User u = new User(entryname,entrykorname,entryMail,entryPass,entryPrezime);
 
-        databaseReference.push().setValue(u);
+        firebaseDatabase.getReference("Korisnici").push().setValue(u);
         //ne postavljamo id
 
 
@@ -250,12 +269,12 @@ public class RegisterActivity extends AppCompatActivity {
     //i sa tim mailom
     //vraca false ako ne postoji
     //vraca true ako postoji
-    public boolean isExsistingUser(String newKorIme){
+    public boolean isExsistingUser(String email){
 
             List<User> korisnici = new ArrayList<User>();
             korisnici = mDataBaseHelper.getAllUsers();
             for(int i=0;i<korisnici.size();i++){
-                if(korisnici.get(i).getKoriscnickoIme().equals(newKorIme)){
+                if(korisnici.get(i).getEmail().equals(email)){
                     return true;
                 }
             }
@@ -264,9 +283,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public boolean AddData(String newime,String newKorIme,String email,String pass,String prezime){
-
-            boolean insert = mDataBaseHelper.addUser(newime, newKorIme,email,pass,prezime);
-
+            boolean insert = false;
+                if(!isExsistingUser(email)){
+                     insert = mDataBaseHelper.addUser(newime, newKorIme, email, pass, prezime);
+                }
             if (insert) {
 
                 Toast.makeText(this, "Korisnik uspesno unet", Toast.LENGTH_SHORT).show();
@@ -276,6 +296,23 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             return false;
+
+    }
+
+    public boolean AddRez(String korisnik){
+        boolean insert = false;
+
+            insert = rezDataBaseHelper.addRezervacija(korisnik);
+
+        if (insert) {
+
+            //Toast.makeText(this, "Rez uspesno uneta", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+           // Toast.makeText(this, "Nesto nije u redu sa bazom na telefonu", Toast.LENGTH_SHORT).show();
+        }
+
+        return insert;
 
     }
 

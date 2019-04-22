@@ -17,13 +17,15 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper{
 
     private static final String TAG ="android";
-    private static final String TABLE_NAME="users";
+    private static final String TABLE_NAME="useriRadi";
     private static final String COL1="ID";
     private static final String COL2="Name";
     private static final String COL3="korisnickoIme";
     private static final String COL4="email";
     private static final String COL5="password";
     private static final String COL6="prezime";
+
+
 
     public DatabaseHandler(Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -33,11 +35,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
             String createTable ="CREATE TABLE "+TABLE_NAME+" (ID INTEGER PRIMARY KEY AUTOINCREMENT, "+COL2+" TEXT,"+COL3+" TEXT,"+COL4+" TEXT,"+COL5+" TEXT,"+COL6+" TEXT)";
             db.execSQL(createTable);
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE "+TABLE_NAME);
+
         onCreate(db);
     }
 
@@ -55,6 +60,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         return result != -1;
     }
+
+
+
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -87,6 +95,44 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             }
         }
         return users;
+    }
+
+    public void deleteAll(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+TABLE_NAME);
+    }
+
+    public User findUser(){
+        User u = new User();
+
+        String USERS_SELECT_QUERY =
+                String.format("SELECT * FROM %s;",
+                        TABLE_NAME);
+
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(USERS_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+
+                    u.setKoriscnickoIme(cursor.getString(cursor.getColumnIndex(COL3)));
+                    u.setEmail(cursor.getString(cursor.getColumnIndex(COL4)));
+                    u.setPass(cursor.getString(cursor.getColumnIndex(COL5)));
+                    u.setPrezime(cursor.getString(cursor.getColumnIndex(COL6)));
+
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Vracen korisnik");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+
+        return u;
     }
 }
 

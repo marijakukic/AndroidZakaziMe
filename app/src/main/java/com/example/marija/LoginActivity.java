@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -74,9 +75,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public boolean ret;
     boolean ret2;
     String globalniPass;
+
     boolean cancel = false;
     View focusView = null;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
         populateAutoComplete();
+
 
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -157,11 +160,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
   //da li postoji korisnik sa tim mailom
     public void isExsistingUser(String email){
 
@@ -177,6 +175,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mEmailView.setError(getString(R.string.emailnepostojeci));
                     cancel = true;
                     focusView = mEmailView;
+
+
+                }else{
+                    User u = dataSnapshot.getValue(User.class);
+
+
 
 
                 }
