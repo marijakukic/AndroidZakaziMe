@@ -1,10 +1,10 @@
-package com.example.marija;
+package com.example.marija.Models;
 
 import android.widget.ImageView;
 
 public class Usluga {
 
-    private String ID;
+    private int ID;
     private String naziv;
     private int slika;
     private String opis;
@@ -13,7 +13,8 @@ public class Usluga {
 
     public Usluga(){}
 
-    public Usluga(String naziv, int slika, String opis, String lokacija, String kategorija) {
+    public Usluga(int id,String naziv, int slika, String opis, String lokacija, String kategorija) {
+        this.ID = id;
         this.naziv = naziv;
         this.slika = slika;
         this.opis = opis;
@@ -21,11 +22,11 @@ public class Usluga {
         this.kategorija = kategorija;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 
@@ -51,5 +52,21 @@ public class Usluga {
 
     public void setOpis(String opis) {
         this.opis = opis;
+    }
+
+    public String getLokacija() {
+        return lokacija;
+    }
+
+    public void setLokacija(String lokacija) {
+        this.lokacija = lokacija;
+    }
+
+    public String getKategorija() {
+        return kategorija;
+    }
+
+    public void setKategorija(String kategorija) {
+        this.kategorija = kategorija;
     }
 }
