@@ -1,4 +1,4 @@
-package com.example.marija;
+package com.example.marija.Models;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,7 +12,6 @@ public class Usluga {
     private String kategorija;
 
     public Usluga(){}
-
     public Usluga(String naziv, int slika, String opis, String lokacija, String kategorija) {
 
         this.naziv = naziv;
@@ -31,6 +30,13 @@ public class Usluga {
         this.kategorija = kategorija;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
     public String getNaziv() {
         return naziv;
@@ -70,13 +76,5 @@ public class Usluga {
 
     public void setKategorija(String kategorija) {
         this.kategorija = kategorija;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 }

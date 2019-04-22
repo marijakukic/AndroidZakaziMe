@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import android.support.design.widget.TabLayout;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.marija.Models.User;
 
 import java.util.ArrayList;
 import java.util.List;
