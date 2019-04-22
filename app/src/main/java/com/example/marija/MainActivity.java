@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
-import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements
     private TextView name;
     private TextView description;
 
-    private ArrayList<Usluga> list,konacnaListaUsluga = new ArrayList<Usluga>();
+    private ArrayList<Usluga> list;
+    private ArrayList<com.example.marija.Usluga> konacnaListaUsluga = new ArrayList<Usluga>();
     private ArrayList<Usluga> novaListaUsluga = new ArrayList<Usluga>();
     private ArrayAdapter<Usluga> adapter;
     String[] array_spinner,array_spinner1;
@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements
         Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje");
         List<Usluga> usluge = new ArrayList<Usluga>();
 
-        Usluga u1 = new Usluga("Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
-        u1.setID(usluge.size());
         usluge.add(u1);
         usluge.add(u2);
         usluge.add(u3);
@@ -411,20 +409,20 @@ public class MainActivity extends AppCompatActivity implements
 
             return convertView;
         }
-    }
 
 
-        private CustomAdapter updateList(ArrayList<Usluga> novalista){
+
+        private void updateList(ArrayList<Usluga> novalista){
 
             Toast.makeText(MainActivity.this,Integer.toString(novalista.size()),Toast.LENGTH_LONG).show();
             Toast.makeText(MainActivity.this,Integer.toString(konacnaListaUsluga.size()),Toast.LENGTH_LONG).show();
             konacnaListaUsluga.clear();
             konacnaListaUsluga.addAll(list);
-            this.notifyDataSetChanged();
+            //this.notifyDataSetChanged();
             lv.invalidateViews();
             lv.refreshDrawableState();
 
-            return this;
+            //return this;
         }
     }
 }
