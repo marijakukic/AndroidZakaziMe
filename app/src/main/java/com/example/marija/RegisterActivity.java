@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.marija.Models.User;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
