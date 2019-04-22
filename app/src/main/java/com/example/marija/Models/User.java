@@ -1,5 +1,8 @@
 package com.example.marija.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private long ID;
@@ -8,6 +11,8 @@ public class User {
     private String email;
     private String pass;
     private String prezime;
+
+
 
     public User(){}
 
@@ -18,6 +23,7 @@ public class User {
         this.email = email;
         this.pass = pass;
         this.prezime = prezime;
+
     }
 
     public User(String Name,String koriscnickoIme,String email,String pass,String prezime) {
@@ -26,6 +32,7 @@ public class User {
         this.email = email;
         this.pass = pass;
         this.prezime = prezime;
+
     }
 
     public long getID() {
@@ -75,4 +82,39 @@ public class User {
     public void setPrezime(String prezime) {
         this.prezime = prezime;
     }
+
+
+   /* public List<Rezervacija> getListaAktivnih(){
+        List<Rezervacija> listaAktivnih = new ArrayList<Rezervacija>();
+        for(Rezervacija r :listaRezervacija){
+            if(r.isAktivna()){
+                listaAktivnih.add(r);
+            }
+        }
+
+        return listaAktivnih;
+    }
+
+    public List<Rezervacija> getListaProslih(){
+        List<Rezervacija> listaProslih = new ArrayList<Rezervacija>();
+        for(Rezervacija r :listaRezervacija){
+            if(!r.isAktivna()){
+                listaProslih.add(r);
+            }
+        }
+
+        return listaProslih;
+    }
+
+    public void addToListaAktivnih(Rezervacija r){
+        r.setAktivna(true);
+        listaRezervacija.add(r);
+    }
+
+    public void addToListProslih(Rezervacija r){
+        r.setAktivna(false);
+        listaRezervacija.add(r);
+    }*/
+
+
 }

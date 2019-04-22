@@ -1,4 +1,4 @@
-package com.example.marija.Models;
+package com.example.marija;
 
 import android.widget.ImageView;
 
@@ -12,6 +12,14 @@ public class Usluga {
     private String kategorija;
 
     public Usluga(){}
+    public Usluga(String naziv, int slika, String opis, String lokacija, String kategorija) {
+
+        this.naziv = naziv;
+        this.slika = slika;
+        this.opis = opis;
+        this.lokacija = lokacija;
+        this.kategorija = kategorija;
+    }
 
     public Usluga(int id,String naziv, int slika, String opis, String lokacija, String kategorija) {
         this.ID = id;

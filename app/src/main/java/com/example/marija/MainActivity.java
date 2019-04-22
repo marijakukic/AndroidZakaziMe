@@ -1,7 +1,7 @@
 package com.example.marija;
 
+import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ListView;
@@ -34,8 +36,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.StrictMath.toIntExact;
 
@@ -61,9 +68,7 @@ public class MainActivity extends AppCompatActivity implements
     Listener listener;
     private boolean mSpinnerInitialized;
     CustomAdapter customAdapter;
-    //String[] data = {"Belle Femme Frizer","Work and friends skola jezika","Privatni casovi matematike"};
-    //int[] images = {R.drawable.frizerski_salon, R.drawable.skolajezika,R.drawable.privatnicasovi};
-    //String[] opisi ={"Partizanskih baza 2","Gogoljeva 15","Balzakova 18"};
+
 
 
     @Override
@@ -78,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements
         Usluga u3 = new Usluga(2,"Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Beograd","Obrazovanje");
         Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje");
         List<Usluga> usluge = new ArrayList<Usluga>();
+
+        Usluga u1 = new Usluga("Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
+        u1.setID(usluge.size());
         usluge.add(u1);
         usluge.add(u2);
         usluge.add(u3);
@@ -94,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Usluga u = ds.getValue(Usluga.class);
-                    /*imageView.setImageResource(u.getSlika());
-                    name.setText(u.getNaziv());
-                    description.setText(u.getOpis());*/
                     list.add(u);
+
+
                 }
+
             }
 
             @Override
@@ -209,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -220,9 +229,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void addUslugaToFireBase(List<Usluga> listaUsluga){
+
+
         for(Usluga u : listaUsluga) {
-            databaseReference.push().setValue(u);
+
+             databaseReference.push().setValue(u);
+
         }
+
     }
 
     @Override
@@ -244,9 +258,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -277,8 +289,8 @@ public class MainActivity extends AppCompatActivity implements
 
         } else if (id == R.id.nav_send) {
 
-        }
-            */
+        }*/
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -399,6 +411,7 @@ public class MainActivity extends AppCompatActivity implements
 
             return convertView;
         }
+    }
 
 
         private CustomAdapter updateList(ArrayList<Usluga> novalista){
