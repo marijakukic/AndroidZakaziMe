@@ -1,12 +1,9 @@
 package com.example.marija;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.marija.Models.Rezervacija;
 import com.example.marija.Models.User;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,6 +126,7 @@ public class ProsleRezervacije extends Fragment {
 
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
+            TextView vreme =(TextView)convertView.findViewById(R.id.vreme);
             Button oceni = (Button)convertView.findViewById(R.id.recenzija);
             oceni.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -141,6 +137,7 @@ public class ProsleRezervacije extends Fragment {
 
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());
+            vreme.setText(lista.get(position).getT().getVreme());
 
             return convertView;
         }
