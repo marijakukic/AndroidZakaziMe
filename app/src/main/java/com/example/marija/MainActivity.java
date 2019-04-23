@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements
     Listener listener;
     private boolean mSpinnerInitialized;
     CustomAdapter customAdapter;
-
+    TextView nevidljiviIDusluge;
+     int ID_usluge;
 
 
     @Override
@@ -68,11 +70,19 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         list = new ArrayList<Usluga>();
         listener = new Listener();
-
-        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
-        Usluga u2 = new Usluga(1,"Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje");
-        Usluga u3 = new Usluga(2,"Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Beograd","Obrazovanje");
-        Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje");
+        // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
+        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+                "Partizanskih baza 2 Novi Sad","Feniranje 100 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Gotovina,kartica");
+        Usluga u2 = new Usluga(1,"Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje",
+                "Gogoljeva 15 Novi Sad","Cas engleskog 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Gotovina,kartica");
+        Usluga u3 = new Usluga(2,"Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Beograd","Obrazovanje",
+                "Balzakova 18 Beograd","Cas matematike 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Gotovina,kartica");
+        Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje",
+                "Balzakova 18 Novi Sad","Izbeljivanje 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Gotovina,kartica");
         List<Usluga> usluge = new ArrayList<Usluga>();
 
         usluge.add(u1);
@@ -92,10 +102,7 @@ public class MainActivity extends AppCompatActivity implements
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Usluga u = ds.getValue(Usluga.class);
                     list.add(u);
-
-
                 }
-
             }
 
             @Override
@@ -109,10 +116,12 @@ public class MainActivity extends AppCompatActivity implements
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position==0){
+
                     Intent myIntent = new Intent(view.getContext(),ListItemActivity.class);
-                    startActivityForResult(myIntent,0);
-                }
+                    ID_usluge = konacnaListaUsluga.get(position).getID();
+                    myIntent.putExtra("ID_usluge",ID_usluge);
+                    startActivity(myIntent);
+
             }
         });
         // UPIS U BAZU
@@ -331,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements
                         else {
                                 novaListaUsluga.clear();
                                 for(Usluga u : list) {
-                                    if(izabranaKategorija == u.getKategorija() && izabranaLokacija==u.getLokacija()) { // mozda treba contains u. ??
+                                    if(izabranaKategorija == u.getKategorija() && izabranaLokacija==u.getLokacija()) {
                                         novaListaUsluga.add(u);
                                     } else if(izabranaKategorija == u.getKategorija() && izabranaLokacija=="Sve") {
                                         spiner_kategorije();
@@ -416,6 +425,7 @@ public class MainActivity extends AppCompatActivity implements
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
             TextView name =(TextView)convertView.findViewById(R.id.name);
             TextView description =(TextView)convertView.findViewById(R.id.description);
+           // nevidljiviIDusluge.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
 
             imageView.setImageResource(konacnaListaUsluga.get(position).getSlika());
             name.setText(konacnaListaUsluga.get(position).getNaziv());

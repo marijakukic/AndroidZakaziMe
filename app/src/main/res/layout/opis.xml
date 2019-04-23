@@ -23,28 +23,31 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/naslovUsluge"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:text="Frizerski salon" />
+                android:layout_height="35dp"/>
+
+
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/slikaUsluge"
                 android:layout_width="match_parent"
                 android:layout_height="342dp"
                 android:src="@drawable/cool_pic" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/nacinPlacanjaUsluge"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:text="Nacin placanja: Gotovina,Platna kartica" />
+                />
 
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/adresaUsluge"
                 android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:text="Adresa: Gogoljeva 2 Novi Sad" />
+                android:layout_height="34dp" />
+
+
+
 
             <Button
                 android:id="@+id/lokacijaDugme"

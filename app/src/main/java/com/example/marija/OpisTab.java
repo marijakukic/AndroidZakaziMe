@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.marija.Models.Usluga;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +38,46 @@ public class OpisTab extends Fragment {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    TextView nazivUsluge;
+    TextView adresaUsluge;
+    TextView nacinPlacanjaUsluge;
+    TextView nevidljiviIDusluge;
+    ImageView slikaUsluge;
+    int id_usluge;
+    Usluga selektovana_usluga;
+
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.opis,container,false);
+
+        id_usluge = getArguments().getInt("ID_usluge");
+        nazivUsluge = view.findViewById(R.id.naslovUsluge);
+        adresaUsluge = view.findViewById(R.id.adresaUsluge);
+        nacinPlacanjaUsluge = view.findViewById(R.id.nacinPlacanjaUsluge);
+        //slike fale
+
+        Query query = FirebaseDatabase.getInstance().getReference("Usluge")
+                .orderByChild("id").equalTo(id_usluge);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    selektovana_usluga = new Usluga();
+                    selektovana_usluga = ds.getValue(Usluga.class);
+                }
+                nazivUsluge.setText(selektovana_usluga.getNaziv());
+                adresaUsluge.setText(selektovana_usluga.getAdresa());
+                nacinPlacanjaUsluge.setText(selektovana_usluga.getNacinPlacanja());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         if(isServicesOK()){
             Button btnMap = (Button) view.findViewById(R.id.lokacijaDugme);

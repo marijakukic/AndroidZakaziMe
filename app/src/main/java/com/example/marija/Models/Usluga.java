@@ -10,6 +10,10 @@ public class Usluga {
     private String opis;
     private String lokacija;
     private String kategorija;
+    private String adresa;
+    private String cenovik;
+    private String radnoVreme;
+    private String nacinPlacanja;
 
     public Usluga(){}
     public Usluga(String naziv, int slika, String opis, String lokacija, String kategorija) {
@@ -21,13 +25,18 @@ public class Usluga {
         this.kategorija = kategorija;
     }
 
-    public Usluga(int id,String naziv, int slika, String opis, String lokacija, String kategorija) {
-        this.ID = id;
+    public Usluga(int ID, String naziv, int slika, String opis, String lokacija,
+                  String kategorija, String adresa, String cenovik, String radnoVreme, String nacinPlacanja) {
+        this.ID = ID;
         this.naziv = naziv;
         this.slika = slika;
         this.opis = opis;
         this.lokacija = lokacija;
         this.kategorija = kategorija;
+        this.adresa = adresa;
+        this.cenovik = cenovik;
+        this.radnoVreme = radnoVreme;
+        this.nacinPlacanja = nacinPlacanja;
     }
 
     public int getID() {
@@ -76,5 +85,37 @@ public class Usluga {
 
     public void setKategorija(String kategorija) {
         this.kategorija = kategorija;
+    }
+
+    public String getAdresa() {
+        return adresa;
+    }
+
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
+
+    public String getCenovik() {
+        return cenovik;
+    }
+
+    public void setCenovik(String cenovik) {
+        this.cenovik = cenovik;
+    }
+
+    public String getRadnoVreme() {
+        return radnoVreme;
+    }
+
+    public void setRadnoVreme(String radnoVreme) {
+        this.radnoVreme = radnoVreme;
+    }
+
+    public String getNacinPlacanja() {
+        return nacinPlacanja;
+    }
+
+    public void setNacinPlacanja(String nacinPlacanja) {
+        this.nacinPlacanja = nacinPlacanja;
     }
 }

@@ -136,7 +136,9 @@ public class RegisterActivity extends AppCompatActivity {
         String entryPrezime = mPrezimeView.getText().toString();
 
         if(entryMail.equals("ghh@")) {
-            Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Partizanskih baza 2","Novi Sad","Lepota");
+            Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+                    "Partizanskih baza 2 Novi Sad","Feniranje 100 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                    "Gotovina,kartica");
             Termin t = new Termin("22.04.2018.", "15:00", true);
             Rezervacija r = new Rezervacija(6, u1, t, true, "m@");
             AddRez(r.getEmailKorisnika());

@@ -13,6 +13,8 @@ public class ListItemActivity extends AppCompatActivity {
 
     private SectionPageAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+    int ID_usluge;
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +32,23 @@ public class ListItemActivity extends AppCompatActivity {
 
 
 
+        if(bundle!=null)
+        {
+            ID_usluge = bundle.getInt("ID_usluge");
+        }
 
+
+        //bundle.putInt("ID_usluge", ID_usluge);
 
     }
 
     private void setViewPager(ViewPager viewPager){
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OpisTab(),"Opis");
+        OpisTab opis = new OpisTab();
+        Intent iin= getIntent();
+        bundle  = iin.getExtras();
+        opis.setArguments(bundle);
+        adapter.addFragment(opis,"Opis");
         adapter.addFragment(new RadnoVreme(),"Radno vreme");
         adapter.addFragment(new Termini(),"Termini");
         adapter.addFragment(new Recenzije(),"Recenzije");
