@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marija.Models.Rezervacija;
 import com.example.marija.Models.User;
@@ -34,11 +36,13 @@ public class ProsleRezervacije extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private DatabaseHandler databaseHandler;
+    private RezervacijeDatabaseHandler rezervacijeDatabaseHandler;
     String datum;
     String vreme;
     ListView lv;
     Date datumDate;
     Date currentTime;
+     TextView nevidljiviID;
 
     @Nullable
     @Override
@@ -49,6 +53,7 @@ public class ProsleRezervacije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
         databaseHandler= new DatabaseHandler(getContext());
+        rezervacijeDatabaseHandler=new RezervacijeDatabaseHandler(getContext());
         //User u = new User("krr","krr","krr@","kkkkk","krr");
         User u = databaseHandler.findUser();
         currentTime = Calendar.getInstance().getTime();
@@ -128,10 +133,12 @@ public class ProsleRezervacije extends Fragment {
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView vreme =(TextView)convertView.findViewById(R.id.vreme);
             Button oceni = (Button)convertView.findViewById(R.id.recenzija);
+            nevidljiviID = (TextView) convertView.findViewById(R.id.nevidljiviIdRez);
+            nevidljiviID.setText(Integer.toString(lista.get(position).getId()));
             oceni.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openDialog();
+                    openDialog(Integer.parseInt(nevidljiviID.getText().toString()));
                 }
             });
 
@@ -143,8 +150,32 @@ public class ProsleRezervacije extends Fragment {
         }
     }
 
-    public void openDialog(){
+    public void openDialog(int idRez){
+
+        Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                .orderByChild("id").equalTo(Integer.parseInt(nevidljiviID.getText().toString()));
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+                    Rezervacija r = ds.getValue(Rezervacija.class);
+                    boolean insert = rezervacijeDatabaseHandler.addRezervacija(r);
+                    if(insert){Toast.makeText(getContext(),"USPESNO UNETO",Toast.LENGTH_SHORT).show();}
+                    else{Toast.makeText(getContext(),"NIJE UNETO",Toast.LENGTH_SHORT).show();}
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         DialogOceni dialogOceni = new DialogOceni();
+
         dialogOceni.show(getFragmentManager(),"Recenzija");
 
     }

@@ -3,7 +3,7 @@ package com.example.marija.Models;
 import java.sql.Date;
 
 public class Termin {
-
+    //MOZDA DODATI ID
     private String datum;
     private String vreme;
     private boolean slobodan;

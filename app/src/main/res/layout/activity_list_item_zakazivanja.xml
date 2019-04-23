@@ -48,6 +48,14 @@
         android:layout_toRightOf="@id/termin"
         android:text="Otkazi" />
 
+    <TextView
+        android:id="@+id/nevidljivi"
+        android:layout_width="283dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/naslov"
+
+        android:visibility="invisible"/>
+
 
 
 

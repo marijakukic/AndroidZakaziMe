@@ -1,9 +1,11 @@
 package com.example.marija;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +45,7 @@ public class AktivneRezervacije extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private DatabaseHandler databaseHandler;
+    private RezervacijeDatabaseHandler rezdatabaseHandler;
     String datum;
     String vreme;
     ListView lv;
@@ -56,6 +61,7 @@ public class AktivneRezervacije extends Fragment {
 
         lista = new ArrayList<>();
         databaseHandler = new DatabaseHandler(getContext());
+        rezdatabaseHandler = new RezervacijeDatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
        lv = (ListView)view.findViewById(R.id.listViewAktivne);
@@ -95,6 +101,7 @@ public class AktivneRezervacije extends Fragment {
                     Log.d("PRVI DATUM",datumTermina.toString());
                     Log.d("DRUGI DATUM",currentTime.toString());
                     if(datumTermina.compareTo(currentTime)>0) {
+
                         lista.add(r);
                     }
 
@@ -144,16 +151,49 @@ public class AktivneRezervacije extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = getLayoutInflater().inflate(R.layout.activity_list_item_zakazivanja, null);
-
+            final TextView nevidljiviID = (TextView) convertView.findViewById(R.id.nevidljivi);
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView sati=(TextView)convertView.findViewById(R.id.sati);
             Button otkazi = (Button)convertView.findViewById(R.id.otkazi);
-
-
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());
             sati.setText(lista.get(position).getT().getVreme());
+            nevidljiviID.setText(Integer.toString(lista.get(position).getId()));
+            otkazi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //ovo ce trebati da ide iz lokalne baze
+                       // Rezervacija r = rezdatabaseHandler.findOneReservation(Integer.parseInt(nevidljiviID.getText().toString()));
+                    Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                            .orderByChild("id").equalTo(Integer.parseInt(nevidljiviID.getText().toString()));
+
+                    query.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+                                FirebaseDatabase.getInstance().getReference("Rezervacije").child(ds.getKey()).removeValue();
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(AktivneRezervacije.this);
+                                ft.attach(AktivneRezervacije.this);
+                                ft.commit();
+                                //TO DO: ovde mora da se vrati u listu slobodnih termina
+                                Toast.makeText(getContext(),"Otkazali ste rezervaciju",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
+
+
+
 
 
 

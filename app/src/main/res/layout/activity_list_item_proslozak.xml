@@ -48,6 +48,14 @@
         android:layout_toRightOf="@id/termin"
         android:text="Recenzija" />
 
+    <TextView
+        android:id="@+id/nevidljiviIdRez"
+        android:layout_width="283dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/naslov"
+
+      android:visibility="invisible"/>
+
 
 
 
