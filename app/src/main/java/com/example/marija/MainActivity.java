@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
+import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_pocetna) {
@@ -426,6 +430,13 @@ public class MainActivity extends AppCompatActivity implements
             description.setText(konacnaListaUsluga.get(position).getOpis());
             nevidljivi.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
 
+            User u = mDataBaseHelper.findUser();
+            TextView navigation = (TextView)findViewById(R.id.korisnikNavigation);
+            TextView navigation1 = (TextView)findViewById(R.id.korImeNav);
+            ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera);
+            navigation.setText(u.getEmail());
+            navigation1.setText(u.getKoriscnickoIme());
+            slikaUsera.setImageResource(R.drawable.user);
 
             return convertView;
         }

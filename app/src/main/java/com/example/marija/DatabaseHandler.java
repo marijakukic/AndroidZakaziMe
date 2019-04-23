@@ -12,8 +12,7 @@ import com.example.marija.Models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-// u ovoj klasi kucamo sve metode koje se ticu pristupa bazi za tabelu user
-//mozda u buducnosti mozemo razdvojiti da svaki model ima svoju klasu za pristup bazi
+
 public class DatabaseHandler extends SQLiteOpenHelper{
 
     private static final String TAG ="android";
