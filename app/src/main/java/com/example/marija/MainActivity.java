@@ -292,66 +292,89 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            Spinner spin = (Spinner)parent;
-            Spinner spin2 = (Spinner)parent;
-
             if (!mSpinnerInitialized) {
                 mSpinnerInitialized = true;
                 lv.setAdapter(new CustomAdapter(list));
-
-                Toast.makeText(MainActivity.this,"PRVI PUT",Toast.LENGTH_LONG).show();
-
+                izabranaLokacija = array_spinner[position];
+                izabranaKategorija = array_spinner1[position];
                 return;
             }
-            novaListaUsluga.clear();
-            if(spin.getId() == R.id.Spinner01) //lokacije
-            {
-                izabranaLokacija = array_spinner[position];
-                Toast.makeText(MainActivity.this,izabranaLokacija,Toast.LENGTH_LONG).show();
-                if(izabranaLokacija.equals("Sve") ) {
-                    //for()
-                    Toast.makeText(MainActivity.this,"Usao u lok SVE",Toast.LENGTH_LONG).show();
-                    lv.setAdapter(new CustomAdapter(list));
-
-                    return;
-
-                } else {
-
-                    for (Usluga u : list) {
-                        Toast.makeText(MainActivity.this,izabranaLokacija,Toast.LENGTH_LONG).show();
-                        if (izabranaLokacija.equals(u.getLokacija()) && !novaListaUsluga.contains(u)) {
-                            novaListaUsluga.add(u);
+            switch (parent.getId()) {
+                    case R.id.Spinner01:  //LOKACIJA
+                        izabranaLokacija = array_spinner[position];
+                        //Toast.makeText(MainActivity.this,izabranaLokacija,Toast.LENGTH_LONG).show();
+                        if(izabranaLokacija.equals("Sve")) {
+                            spiner_kategorije();
+                            break;
                         }
-                    }
-                    Toast.makeText(MainActivity.this,Integer.toString(novaListaUsluga.size()),Toast.LENGTH_LONG).show();
-                    lv.setAdapter(new CustomAdapter(novaListaUsluga));
+                        else {
+                                novaListaUsluga.clear();
+                                for(Usluga u : list) {
+                                    if(izabranaLokacija == u.getLokacija() && izabranaKategorija==u.getKategorija()) {
+                                        novaListaUsluga.add(u);
+                                    }else if(izabranaLokacija == u.getLokacija() && izabranaKategorija=="Sve") {
+                                        spiner_lokacije();
+                                        break;
+                                    }
+                                }
+                                lv.setAdapter(new CustomAdapter(novaListaUsluga));
+                                break;
+                        }
 
-                    return;
-                }
-
+                    case R.id.Spinner02:  //KATEGORIJA
+                        izabranaKategorija = array_spinner1[position];
+                       // Toast.makeText(MainActivity.this,izabranaKategorija,Toast.LENGTH_LONG).show();
+                        if(izabranaKategorija == "Sve" ) {
+                            spiner_lokacije();
+                            break;
+                        }
+                        else {
+                                novaListaUsluga.clear();
+                                for(Usluga u : list) {
+                                    if(izabranaKategorija == u.getKategorija() && izabranaLokacija==u.getLokacija()) { // mozda treba contains u. ??
+                                        novaListaUsluga.add(u);
+                                    } else if(izabranaKategorija == u.getKategorija() && izabranaLokacija=="Sve") {
+                                        spiner_kategorije();
+                                        break;
+                                    }
+                                }
+                                lv.setAdapter(new CustomAdapter(novaListaUsluga));
+                                break;
+                        }
+                    default:
+                        break;
             }
-            else if(spin2.getId() == R.id.Spinner02) //kategorije
-            {
-                izabranaKategorija = array_spinner1[position];
-                Toast.makeText(MainActivity.this,izabranaKategorija,Toast.LENGTH_LONG).show();
-                if(izabranaKategorija.equals("Sve")) {
-                    Toast.makeText(MainActivity.this,"Usao u kat SVE",Toast.LENGTH_LONG).show();
-                    lv.setAdapter(new CustomAdapter(list));
-                    return;
-                }
-                else {
 
+        }
+        public void spiner_lokacije(){
+            if(!izabranaLokacija.equals("Sve")) {
+                novaListaUsluga.clear();
+                for (Usluga u : list) {
+                    if(izabranaLokacija.equals(u.getLokacija())) {
+                        novaListaUsluga.add(u);
+                    }
+                }
+                lv.setAdapter(new CustomAdapter(novaListaUsluga));
+                return;
+            } else {
+                lv.setAdapter(new CustomAdapter(list));
+                return;
+            }
+        }
+
+        public void spiner_kategorije(){
+            if(!izabranaKategorija.equals("Sve")) {
+                    novaListaUsluga.clear();
                     for (Usluga u : list) {
-                        if (izabranaKategorija.equals(u.getKategorija()) && !novaListaUsluga.contains(u) ) {
+                        if(izabranaKategorija.equals(u.getKategorija())) {
                             novaListaUsluga.add(u);
                         }
-
                     }
                     lv.setAdapter(new CustomAdapter(novaListaUsluga));
                     return;
-                }
-
+            } else {
+                lv.setAdapter(new CustomAdapter(list));
+                return;
             }
 
         }
@@ -400,6 +423,9 @@ public class MainActivity extends AppCompatActivity implements
 
 
             return convertView;
+        }
+        public ArrayList<Usluga> listaAdaptera() {
+            return konacnaListaUsluga;
         }
 
 
