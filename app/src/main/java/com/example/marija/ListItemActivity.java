@@ -13,18 +13,15 @@ public class ListItemActivity extends AppCompatActivity {
 
     private SectionPageAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+    private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
         setupActionBar();
-        //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //  setSupportActionBar(toolbar);
-
         sectionsPagerAdapter= new SectionPageAdapter(getSupportFragmentManager());
         viewPager=(ViewPager)findViewById(R.id.container);
         setViewPager(viewPager);
-
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -56,6 +53,7 @@ public class ListItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            uslugaDatabaseHandler.deleteAll();
             super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);

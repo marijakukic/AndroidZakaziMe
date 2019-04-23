@@ -12,10 +12,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marija.Models.Recenzija;
+import com.example.marija.Models.Rezervacija;
+import com.example.marija.Models.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -29,30 +36,51 @@ public class Recenzije extends Fragment {
    /* String[] komentari = {"Jako sam zadovoljan","Super usluga","Jako ljubazno osoblje"};
     String[] datumi ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
     String[] korisnici={"Pera Peric","Mika Mikic","Ana Anic"};*/
+   int [] slike = {R.drawable.user1,R.drawable.user2,R.drawable.user3};
    private List<Recenzija> lista;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private DatabaseHandler databaseHandler;
-
+    private UslugaDatabaseHandler uslugaDatabaseHandler;
+    int idUsluge;
     Date currentDate;
+    ListView lv;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recenzije,container,false);
-        ListView lv = (ListView)view.findViewById(R.id.listViewRecenzije);
+         lv = (ListView)view.findViewById(R.id.listViewRecenzije);
         lista = new ArrayList<>();
+        uslugaDatabaseHandler = new UslugaDatabaseHandler(getContext());
+        idUsluge = uslugaDatabaseHandler.findUsluga();
         databaseHandler = new DatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Recenzije");
-        currentDate = Calendar.getInstance().getTime();
-        /*OVDE NAPRAVITI PRISTUP PRIVREMENOJ TABELI GDE CUVAM TU JEDNU
-        ULSUGU NA KOJU JE KLIKNUTO I NAPUNIM LISTU KAO U AKTIVNIM REZ I BRISEM PRI VRACANJU NA MAIN WINDOW,
-        VEROVATNO OPET NEVIDLJIVI ID NEGDE*/
 
-        CustomAdapter customAdapter = new CustomAdapter();
-        lv.setAdapter(customAdapter);
+        Query query = FirebaseDatabase.getInstance().getReference("Recenzije")
+                .orderByChild("idUsluge").equalTo(idUsluge);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+                    Recenzija r = ds.getValue(Recenzija.class);
+                    lista.add(r);
+
+                }
+                CustomAdapter customAdapter = new CustomAdapter();
+                lv.setAdapter(customAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         return view;
     }
 
@@ -82,9 +110,11 @@ public class Recenzije extends Fragment {
             TextView datum = (TextView) convertView.findViewById(R.id.datum);
             ImageView slika = (ImageView) convertView.findViewById(R.id.slikaKorisnika);
 
-            komentar.setText(lista.get(position).getKomentar());
+            komentar.setText(lista.get(position).getOcena() + "    "+lista.get(position).getKomentar());
             korisnik.setText(lista.get(position).getEmailKorinika());
-            datum.setText(currentDate.toString());
+            datum.setText(lista.get(position).getDatum());
+            slika.setImageResource(slike[position]);
+
 
 
 

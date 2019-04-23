@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference1;
     private DatabaseReference databaseReference2;
+    private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     private ImageView imageView;
     private TextView name;
     private TextView description;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements
     Listener listener;
     private boolean mSpinnerInitialized;
     CustomAdapter customAdapter;
+    TextView nevidljivi;
 
 
 
@@ -111,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position==0){
                     Intent myIntent = new Intent(view.getContext(),ListItemActivity.class);
+                   uslugaDatabaseHandler.addUsluga(position);
+                    //pozicija mora da se poklapa sa id usluge
                     startActivityForResult(myIntent,0);
                 }
             }
@@ -416,10 +420,11 @@ public class MainActivity extends AppCompatActivity implements
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
             TextView name =(TextView)convertView.findViewById(R.id.name);
             TextView description =(TextView)convertView.findViewById(R.id.description);
-
+            nevidljivi =(TextView)convertView.findViewById(R.id.nevidljiviIdUsluge);
             imageView.setImageResource(konacnaListaUsluga.get(position).getSlika());
             name.setText(konacnaListaUsluga.get(position).getNaziv());
             description.setText(konacnaListaUsluga.get(position).getOpis());
+            nevidljivi.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
 
 
             return convertView;
