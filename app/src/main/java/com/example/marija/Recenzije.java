@@ -44,6 +44,7 @@ public class Recenzije extends Fragment {
     private DatabaseHandler databaseHandler;
     private UslugaDatabaseHandler uslugaDatabaseHandler;
     int idUsluge;
+    int id_usluge_kliknute;
     Date currentDate;
     ListView lv;
 
@@ -53,6 +54,9 @@ public class Recenzije extends Fragment {
         View view = inflater.inflate(R.layout.recenzije,container,false);
          lv = (ListView)view.findViewById(R.id.listViewRecenzije);
         lista = new ArrayList<>();
+
+        id_usluge_kliknute = getArguments().getInt("ID_usluge");
+
         uslugaDatabaseHandler = new UslugaDatabaseHandler(getContext());
         idUsluge = uslugaDatabaseHandler.findUsluga();
         databaseHandler = new DatabaseHandler(getContext());

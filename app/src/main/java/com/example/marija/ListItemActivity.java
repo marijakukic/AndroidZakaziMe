@@ -41,14 +41,24 @@ public class ListItemActivity extends AppCompatActivity {
 
     private void setViewPager(ViewPager viewPager){
         SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
-        OpisTab opis = new OpisTab();
+
         Intent iin= getIntent();
         bundle  = iin.getExtras();
+
+        OpisTab opis = new OpisTab();
+        RadnoVreme radnoVreme = new RadnoVreme();
+        Termini termini = new Termini();
+        Recenzije recenzije = new Recenzije();
+
         opis.setArguments(bundle);
+        radnoVreme.setArguments(bundle);
+        termini.setArguments(bundle);
+        recenzije.setArguments(bundle);
+
         adapter.addFragment(opis,"Opis");
-        adapter.addFragment(new RadnoVreme(),"Radno vreme");
-        adapter.addFragment(new Termini(),"Termini");
-        adapter.addFragment(new Recenzije(),"Recenzije");
+        adapter.addFragment(radnoVreme,"Radno vreme");
+        adapter.addFragment(termini,"Termini");
+        adapter.addFragment(recenzije,"Recenzije");
         viewPager.setAdapter(adapter);
     }
 

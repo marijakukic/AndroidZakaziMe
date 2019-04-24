@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class RadnoVreme extends Fragment {
 
+    int id_usluge;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -23,6 +25,8 @@ public class RadnoVreme extends Fragment {
                 openDialog();
             }
         });
+        id_usluge = getArguments().getInt("ID_usluge");
+
         return view;
     }
 

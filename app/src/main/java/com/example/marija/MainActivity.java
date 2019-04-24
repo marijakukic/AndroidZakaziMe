@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
                 "Gogoljeva 15 Novi Sad","Cas engleskog 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
                 "Gotovina,kartica");
         Usluga u3 = new Usluga(2,"Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Beograd","Obrazovanje",
-                "Balzakova 18 Beograd","Cas matematike 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Balzakova 18 Beograd","Cas matematike 1000 din ","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
                 "Gotovina,kartica");
         Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje",
                 "Balzakova 18 Novi Sad","Izbeljivanje 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
@@ -130,10 +130,7 @@ public class MainActivity extends AppCompatActivity implements
                     ID_usluge = konacnaListaUsluga.get(position).getID();
                     myIntent.putExtra("ID_usluge",ID_usluge);
                     startActivity(myIntent);
-
-                   uslugaDatabaseHandler.addUsluga(position);
-                    //pozicija mora da se poklapa sa id usluge
-                    //startActivityForResult(myIntent,0);
+                    uslugaDatabaseHandler.addUsluga(position);
                 }
 
         });

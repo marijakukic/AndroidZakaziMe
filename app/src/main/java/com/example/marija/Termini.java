@@ -11,11 +11,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Termini extends Fragment {
 
     String[] naslovi = {"Ponedeljak","Utorak","Sreda"};
     String[] termini ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
+    int id_usluge;
 
     @Nullable
     @Override
@@ -24,6 +26,8 @@ public class Termini extends Fragment {
         ListView lv = (ListView)view.findViewById(R.id.listViewTermini);
         CustomAdapter customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
+        id_usluge = getArguments().getInt("ID_usluge");
+
         return view;
     }
 
