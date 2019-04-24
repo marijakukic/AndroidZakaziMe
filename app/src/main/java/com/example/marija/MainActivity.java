@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
+import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference1;
     private DatabaseReference databaseReference2;
+    private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     private ImageView imageView;
     private TextView name;
     private TextView description;
@@ -60,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements
     Listener listener;
     private boolean mSpinnerInitialized;
     CustomAdapter customAdapter;
+    TextView nevidljivi;
+
     TextView nevidljiviIDusluge;
      int ID_usluge;
 
@@ -102,7 +108,10 @@ public class MainActivity extends AppCompatActivity implements
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Usluga u = ds.getValue(Usluga.class);
                     list.add(u);
+
+
                 }
+
             }
 
             @Override
@@ -122,7 +131,11 @@ public class MainActivity extends AppCompatActivity implements
                     myIntent.putExtra("ID_usluge",ID_usluge);
                     startActivity(myIntent);
 
-            }
+                   uslugaDatabaseHandler.addUsluga(position);
+                    //pozicija mora da se poklapa sa id usluge
+                    //startActivityForResult(myIntent,0);
+                }
+
         });
         // UPIS U BAZU
 
@@ -150,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 array_spinner = new String[(int)dataSnapshot.getChildrenCount()];
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     //String duzinaNiza =  Integer.toString((int)dataSnapshot.getChildrenCount());
                     //Toast.makeText(MainActivity.this,duzinaNiza,Toast.LENGTH_LONG).show();
                     Lokacija k = ds.getValue(Lokacija.class);
@@ -425,12 +438,19 @@ public class MainActivity extends AppCompatActivity implements
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
             TextView name =(TextView)convertView.findViewById(R.id.name);
             TextView description =(TextView)convertView.findViewById(R.id.description);
-           // nevidljiviIDusluge.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
-
+            nevidljivi =(TextView)convertView.findViewById(R.id.nevidljiviIdUsluge);
             imageView.setImageResource(konacnaListaUsluga.get(position).getSlika());
             name.setText(konacnaListaUsluga.get(position).getNaziv());
             description.setText(konacnaListaUsluga.get(position).getOpis());
+            nevidljivi.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
 
+            User u = mDataBaseHelper.findUser();
+            TextView navigation = (TextView)findViewById(R.id.korisnikNavigation);
+            TextView navigation1 = (TextView)findViewById(R.id.korImeNav);
+            ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera);
+            navigation.setText(u.getEmail());
+            navigation1.setText(u.getKoriscnickoIme());
+            slikaUsera.setImageResource(R.drawable.user);
 
             return convertView;
         }

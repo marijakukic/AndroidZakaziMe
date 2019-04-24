@@ -23,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class DialogOceni extends AppCompatDialogFragment {
     Button btn;
     RatingBar ratingBar;
@@ -36,6 +40,7 @@ public class DialogOceni extends AppCompatDialogFragment {
     Button dugmeZaRecenciju;
     int idUsluge;
     int idRez;
+    Date currentDate;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder =new AlertDialog.Builder(getActivity());
@@ -72,7 +77,10 @@ public class DialogOceni extends AppCompatDialogFragment {
                             Rezervacija r = ds.getValue(Rezervacija.class);
                             idUsluge = r.getU().getID();
                             Toast.makeText(getContext(),Integer.toString(idUsluge),Toast.LENGTH_SHORT).show();
-                            Recenzija recenzija = new Recenzija(rating,komentar,korisnik,idUsluge);
+                            currentDate = Calendar.getInstance().getTime();
+                            SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
+                            String dateString = format.format( currentDate );
+                            Recenzija recenzija = new Recenzija(rating,komentar,korisnik,idUsluge,dateString);
                             FirebaseDatabase.getInstance().getReference("Recenzije").push().setValue(recenzija);
                             Toast.makeText(getContext(),"Dodali ste recenziju",Toast.LENGTH_SHORT).show();
                             rezervacijeDatabaseHandler.deleteAll();

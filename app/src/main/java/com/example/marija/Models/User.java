@@ -11,12 +11,13 @@ public class User {
     private String email;
     private String pass;
     private String prezime;
+    private int slika;
 
 
+    public User() {
+    }
 
-    public User(){}
-
-    public User(long ID,String Name,String koriscnickoIme,String email,String pass,String prezime) {
+    public User(long ID, String Name, String koriscnickoIme, String email, String pass, String prezime) {
         this.ID = ID;
         this.Name = Name;
         this.koriscnickoIme = koriscnickoIme;
@@ -26,7 +27,7 @@ public class User {
 
     }
 
-    public User(String Name,String koriscnickoIme,String email,String pass,String prezime) {
+    public User(String Name, String koriscnickoIme, String email, String pass, String prezime) {
         this.Name = Name;
         this.koriscnickoIme = koriscnickoIme;
         this.email = email;
@@ -34,6 +35,17 @@ public class User {
         this.prezime = prezime;
 
     }
+
+    public User(String Name, String koriscnickoIme, String email, String pass, String prezime, int slika) {
+        this.Name = Name;
+        this.koriscnickoIme = koriscnickoIme;
+        this.email = email;
+        this.pass = pass;
+        this.prezime = prezime;
+        this.slika = slika;
+
+    }
+
 
     public long getID() {
         return ID;
@@ -83,38 +95,13 @@ public class User {
         this.prezime = prezime;
     }
 
-
-   /* public List<Rezervacija> getListaAktivnih(){
-        List<Rezervacija> listaAktivnih = new ArrayList<Rezervacija>();
-        for(Rezervacija r :listaRezervacija){
-            if(r.isAktivna()){
-                listaAktivnih.add(r);
-            }
-        }
-
-        return listaAktivnih;
+    public int getSlika() {
+        return slika;
     }
 
-    public List<Rezervacija> getListaProslih(){
-        List<Rezervacija> listaProslih = new ArrayList<Rezervacija>();
-        for(Rezervacija r :listaRezervacija){
-            if(!r.isAktivna()){
-                listaProslih.add(r);
-            }
-        }
-
-        return listaProslih;
+    public void setSlika(int slika) {
+        this.slika = slika;
     }
-
-    public void addToListaAktivnih(Rezervacija r){
-        r.setAktivna(true);
-        listaRezervacija.add(r);
-    }
-
-    public void addToListProslih(Rezervacija r){
-        r.setAktivna(false);
-        listaRezervacija.add(r);
-    }*/
 
 
 }

@@ -155,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
         }*/
 
 
-
+        //DODATI DA SE DODAJE SLIKA ZA KORISNIKA
 
         User u = new User(entryname,entrykorname,entryMail,entryPass,entryPrezime);
 
