@@ -12,21 +12,18 @@
     android:paddingBottom="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/prva"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="Feniranje 300 din" />
+        android:layout_height="30dp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/druga"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="Sisanje 200 din" />
+        android:layout_height="30dp" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/treca"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="Farbanje 500 din" />
+        android:layout_height="30dp" />
 
 </LinearLayout>

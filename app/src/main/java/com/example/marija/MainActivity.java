@@ -78,17 +78,21 @@ public class MainActivity extends AppCompatActivity implements
         listener = new Listener();
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
         Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
-                "Partizanskih baza 2 Novi Sad","Feniranje 100 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Partizanskih baza 2 Novi Sad","Feniranje 100 din:Sisanje 300 din:Farbanje 400 din",
+                "Ponedeljak - Petak 09:00 - 19:00/Subota 10:00 - 16:00/Nedelja neradna",
                 "Gotovina,kartica");
         Usluga u2 = new Usluga(1,"Work and friends skola jezika", R.drawable.skolajezika,"Gogoljeva 15","Novi Sad","Obrazovanje",
-                "Gogoljeva 15 Novi Sad","Cas engleskog 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
+                "Gogoljeva 15 Novi Sad","Cas engleskog 1000 din:Cas nemackog 1200 din:Cas spanskog 1500 din",
+                "Ponedeljak - Petak 09:00 - 19:00/Subota 10:00 - 16:00/Nedelja 11:00 - 15:00",
                 "Gotovina,kartica");
         Usluga u3 = new Usluga(2,"Privatni casovi matematike",R.drawable.privatnicasovi,"Balzakova 18","Beograd","Obrazovanje",
-                "Balzakova 18 Beograd","Cas matematike 1000 din ","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
-                "Gotovina,kartica");
-        Usluga u4 = new Usluga(3,"Izbeljivanje zuba",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje",
-                "Balzakova 18 Novi Sad","Izbeljivanje 1000 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
-                "Gotovina,kartica");
+                "Balzakova 18 Beograd","Cas matematike 1000 din:Cas algebre 1300 din:Cas analize 1 1200din",
+                "Ponedeljak - Petak 17:00 - 20:00/Subota 10:00 - 16:0/Nedelja 11:00 - 15:00",
+                "Samo gotovina");
+        Usluga u4 = new Usluga(3,"Zubar dr. Bosnjak",R.drawable.privatnicasovi,"Balzakova 18","Novi Sad","Zdravlje",
+                "Balzakova 18 Novi Sad","Izbeljivanje zuba 1000 din:Poliranje zuba 1200 din:Popravka po zubu 1500 din",
+                "Ponedeljak - Petak 09:00 - 16:00/Subota 10:00 - 15:00/Nedelja neradna",
+                "Samo gotovina");
         List<Usluga> usluge = new ArrayList<Usluga>();
 
         usluge.add(u1);
