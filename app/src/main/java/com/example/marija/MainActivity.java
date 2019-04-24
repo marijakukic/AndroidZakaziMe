@@ -445,12 +445,13 @@ public class MainActivity extends AppCompatActivity implements
             nevidljivi.setText(Integer.toString(konacnaListaUsluga.get(position).getID()));
 
             User u = mDataBaseHelper.findUser();
-            TextView navigation = (TextView)findViewById(R.id.korisnikNavigation);
-            TextView navigation1 = (TextView)findViewById(R.id.korImeNav);
-            ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera);
+            TextView navigation = (TextView)findViewById(R.id.korisnikNavigation1);
+            TextView navigation1 = (TextView)findViewById(R.id.korImeNav1);
+            ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera1);
             navigation.setText(u.getEmail());
             navigation1.setText(u.getKoriscnickoIme());
             slikaUsera.setImageResource(R.drawable.user);
+
 
             return convertView;
         }
