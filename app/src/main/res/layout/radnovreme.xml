@@ -13,27 +13,24 @@
     tools:context=".ListItemActivity">
 
     <TextView
-        android:id="@+id/tab3"
-        android:layout_width="wrap_content"
+        android:id="@+id/radni_dan"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_gravity="left"
-        android:text="@string/radno_vreme"
         android:textAlignment="gravity" />
 
     <TextView
-        android:id="@+id/tab6"
-        android:layout_width="wrap_content"
+        android:id="@+id/subota"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_gravity="left"
-        android:text="@string/radno_vremeSubota"
         android:textAlignment="gravity" />
 
     <TextView
-        android:id="@+id/tab68"
-        android:layout_width="wrap_content"
+        android:id="@+id/nedelja"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_gravity="left"
-        android:text="@string/radno_vremeNedelja"
         android:textAlignment="gravity"
         android:layout_marginBottom = "12dp"/>
 
