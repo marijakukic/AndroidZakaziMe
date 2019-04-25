@@ -14,6 +14,7 @@ public class Usluga {
     private String cenovik;
     private String radnoVreme;
     private String nacinPlacanja;
+    String ime_slike;
 
     public Usluga(){}
     public Usluga(String naziv, int slika, String opis, String lokacija, String kategorija) {
@@ -117,5 +118,13 @@ public class Usluga {
 
     public void setNacinPlacanja(String nacinPlacanja) {
         this.nacinPlacanja = nacinPlacanja;
+    }
+
+    public String getIme_slike() {
+        return ime_slike;
+    }
+
+    public void setIme_slike(String ime_slike) {
+        this.ime_slike = ime_slike;
     }
 }

@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class ListItemActivity extends AppCompatActivity {
 
@@ -16,6 +17,7 @@ public class ListItemActivity extends AppCompatActivity {
     int ID_usluge;
     Bundle bundle;
     private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
+    ImageView slika;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,6 @@ public class ListItemActivity extends AppCompatActivity {
         setViewPager(viewPager);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
 
 
         if(bundle!=null)
