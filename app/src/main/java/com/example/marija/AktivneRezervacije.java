@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marija.Models.Rezervacija;
+import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +51,7 @@ public class AktivneRezervacije extends Fragment {
     String vreme;
     ListView lv;
     Date datumDate;
+    Termin t;
     Date currentTime;
 
 
@@ -65,9 +67,7 @@ public class AktivneRezervacije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
        lv = (ListView)view.findViewById(R.id.listViewAktivne);
-        //ovde treba uzeti ulogovanog korisnika ali to ne radi
-       // User u = new User("krr","krr","krr@","kkkkk","krr");
-        User u = databaseHandler.findUser();
+       User u = databaseHandler.findUser();
         Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
@@ -90,6 +90,7 @@ public class AktivneRezervacije extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lista.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Rezervacija r = ds.getValue(Rezervacija.class);
                     Date datumTermina=null;
@@ -98,8 +99,7 @@ public class AktivneRezervacije extends Fragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    Log.d("PRVI DATUM",datumTermina.toString());
-                    Log.d("DRUGI DATUM",currentTime.toString());
+
                     if(datumTermina.compareTo(currentTime)>0) {
 
                         lista.add(r);
@@ -172,14 +172,15 @@ public class AktivneRezervacije extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                Rezervacija r = new Rezervacija();
+                                r = ds.getValue(Rezervacija.class);
+
+                               // t = r.getT();
+                               // dodajUFirebase(t);//ovo ne doda dont know why
+
 
                                 FirebaseDatabase.getInstance().getReference("Rezervacije").child(ds.getKey()).removeValue();
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(AktivneRezervacije.this);
-                                ft.attach(AktivneRezervacije.this);
-                                ft.commit();
-                                //TO DO: ovde mora da se vrati u listu slobodnih termina
-                                Toast.makeText(getContext(),"Otkazali ste rezervaciju",Toast.LENGTH_SHORT).show();
+
 
                             }
                         }
@@ -199,5 +200,10 @@ public class AktivneRezervacije extends Fragment {
 
             return convertView;
         }
+    }
+
+    public void dodajUFirebase(Termin t){
+
+            firebaseDatabase.getReference("Termini").push().setValue(t);
     }
 }
