@@ -1,8 +1,11 @@
 package com.example.marija;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -78,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements
         listener = new Listener();
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
 
-        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+        String n = "naziv_0";
+        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.naziv_0,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
                 "Partizanskih baza 2 Novi Sad","Feniranje 100 din:Sisanje 300 din:Farbanje 400 din",
                 "Ponedeljak - Petak 09:00 - 19:00/Subota 10:00 - 16:00/Nedelja neradna",
                 "Gotovina,kartica");
@@ -252,15 +256,23 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

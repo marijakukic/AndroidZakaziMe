@@ -136,14 +136,14 @@ public class RegisterActivity extends AppCompatActivity {
         String entryPrezime = mPrezimeView.getText().toString();
 
         if(entryMail.equals("pera@")) {
-            Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+            Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.naziv_0,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
                     "Partizanskih baza 2 Novi Sad","Feniranje 100 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
                     "Gotovina,kartica");
             Termin t = new Termin("22.04.2018.", "15:00", true);
             Rezervacija r = new Rezervacija(0, u1, t, true, "m@");
             AddRez(r.getEmailKorisnika());
 
-            Rezervacija r2 = new Rezervacija(1,new Usluga(0,"Belle Femme Frizer",R.drawable.frizerski_salon,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+            Rezervacija r2 = new Rezervacija(1,new Usluga(0,"Belle Femme Frizer",R.drawable.naziv_0,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
                     "Partizanskih baza 2 Novi Sad","Feniranje 100 din","Ponedeljak - Subota 09:00 - 17:00 Nedelja neradna",
                     "Gotovina,kartica"),new Termin("29.05.2019.","10:00",false),true,"m@");
             firebaseDatabase.getReference("Rezervacije").push().setValue(r);

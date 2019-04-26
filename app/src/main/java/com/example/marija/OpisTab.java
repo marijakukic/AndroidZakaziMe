@@ -41,7 +41,7 @@ public class OpisTab extends Fragment {
     TextView nazivUsluge;
     TextView adresaUsluge;
     TextView nacinPlacanjaUsluge;
-    TextView nevidljiviIDusluge;
+    TextView opisUsluge;
     ImageView slikaUsluge;
     int id_usluge;
     Usluga selektovana_usluga;
@@ -57,6 +57,7 @@ public class OpisTab extends Fragment {
         adresaUsluge = view.findViewById(R.id.adresaUsluge);
         nacinPlacanjaUsluge = view.findViewById(R.id.nacinPlacanjaUsluge);
         slikaUsluge = view.findViewById(R.id.slikaUsluge);
+        opisUsluge = view.findViewById(R.id.opisUsluge);
 
 
         Query query = FirebaseDatabase.getInstance().getReference("Usluge")
@@ -72,7 +73,8 @@ public class OpisTab extends Fragment {
                 nazivUsluge.setText(selektovana_usluga.getNaziv());
                 adresaUsluge.setText(selektovana_usluga.getAdresa());
                 nacinPlacanjaUsluge.setText(selektovana_usluga.getNacinPlacanja());
-               // slikaUsluge.setImageDrawable(R.drawable.);
+                slikaUsluge.setImageResource(selektovana_usluga.getSlika());
+                opisUsluge.setText(selektovana_usluga.getOpis());
             }
 
             @Override

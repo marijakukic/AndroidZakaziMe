@@ -2,6 +2,7 @@ package com.example.marija;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import com.example.marija.Models.Usluga;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class ListItemActivity extends AppCompatActivity {
 
@@ -18,11 +26,12 @@ public class ListItemActivity extends AppCompatActivity {
     Bundle bundle;
     private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     ImageView slika;
+    Usluga selektovana_usluga;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
-        setupActionBar();
+
         sectionsPagerAdapter= new SectionPageAdapter(getSupportFragmentManager());
         viewPager=(ViewPager)findViewById(R.id.container);
         setViewPager(viewPager);
@@ -34,9 +43,28 @@ public class ListItemActivity extends AppCompatActivity {
         {
             ID_usluge = bundle.getInt("ID_usluge");
         }
+        Query query = FirebaseDatabase.getInstance().getReference("Usluge")
+                .orderByChild("id").equalTo(ID_usluge);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    selektovana_usluga = new Usluga();
+                    selektovana_usluga = ds.getValue(Usluga.class);
+                }
+
+                setupActionBar(selektovana_usluga.getNaziv());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
-        //bundle.putInt("ID_usluge", ID_usluge);
 
     }
 
@@ -64,11 +92,12 @@ public class ListItemActivity extends AppCompatActivity {
     }
 
 
-    private void setupActionBar() {
+    private void setupActionBar(String naslov) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(naslov);
         }
     }
 
