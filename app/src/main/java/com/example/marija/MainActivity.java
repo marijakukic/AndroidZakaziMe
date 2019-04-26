@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
+import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference1;
     private DatabaseReference databaseReference2;
+    private RezervacijaZaTermin rezervacijaZaTermin = new RezervacijaZaTermin(this);
     private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     private ImageView imageView;
     private TextView name;
@@ -238,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     public void addUslugaToFireBase(List<Usluga> listaUsluga){

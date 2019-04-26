@@ -77,6 +77,7 @@ public class ProsleRezervacije extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lista.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Rezervacija r = ds.getValue(Rezervacija.class);
                     Date datumTermina=null;
@@ -87,6 +88,7 @@ public class ProsleRezervacije extends Fragment {
                     }
 
                     if(datumTermina.compareTo(currentTime)<0) {
+
                         lista.add(r);
                     }
 

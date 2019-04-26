@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Termini extends Fragment {
 
@@ -51,6 +52,7 @@ public class Termini extends Fragment {
     int inkrement;
     private  RezervacijaZaTermin rzt;
     Pomocna p;
+    int brojac=0;
 
     @Nullable
     @Override
@@ -58,6 +60,7 @@ public class Termini extends Fragment {
         View view = inflater.inflate(R.layout.termini,container,false);
         r = new Rezervacija();
         lv = (ListView)view.findViewById(R.id.listViewTermini);
+
         id_usluge = getArguments().getInt("ID_usluge");
         databaseHandler = new DatabaseHandler(getContext());
         rzt = new RezervacijaZaTermin(getContext());
@@ -102,13 +105,11 @@ public class Termini extends Fragment {
             }
 
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
 
         return view;
     }
@@ -144,6 +145,7 @@ public class Termini extends Fragment {
                 public void onClick(View v) {
                     idTermina = listaTermina.get(position).getId();
                      p = new Pomocna();
+
                     Query query = FirebaseDatabase.getInstance().getReference("Termini")
                             .orderByChild("id").equalTo(idTermina);
 
@@ -152,69 +154,42 @@ public class Termini extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 t = ds.getValue(Termin.class);
-                                p.setVreme(t.getVreme());
-                                p.setDatum(t.getDatum());
-                                Toast.makeText(getContext(),"SJKDJKASJKSL:"+p.getVreme(),Toast.LENGTH_SHORT).show();
-                                FirebaseDatabase.getInstance().getReference("Termini").child(ds.getKey()).removeValue();
-                                try {
-                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    ft.detach(Termini.this);
-                                    ft.attach(Termini.this);
-                                    ft.commit();
-                                }catch (Exception e){
-                                    Log.d("USOOO SAM","jbg");}
 
+                                    FirebaseDatabase.getInstance().getReference("Termini").child(ds.getKey()).removeValue();
 
+                                    r.setT(t);
+                                    r.setU(u);
+                                    r.setAktivna(true);
+                                    r.setEmailKorisnika(ulogovani.getEmail());
+                                    Random rr = new Random();
+                                    r.setId(rr.nextInt());
+                                    brojac++;
 
-                               Query lastQ = FirebaseDatabase.getInstance().getReference("Rezervacije").orderByKey().limitToLast(1);
-                               lastQ.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for(DataSnapshot ds1 : dataSnapshot.getChildren()) {
-                                                Rezervacija posled = new Rezervacija();
-                                                posled = ds1.getValue(Rezervacija.class);
-                                                idRez = posled.getId();
-                                                rzt.deleteAll();
-                                                rzt.addRezervacija(p,idRez);
-
-
-
-
-                                            }
-
-                                        //FirebaseDatabase.getInstance().getReference("Rezervacije").push().setValue(r);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    if (brojac == 1) {
+                                        FirebaseDatabase.getInstance().getReference("Rezervacije").push().setValue(r);
 
                                     }
-                                });
+
+
+
+
 
                             }
 
+
+
+
                         }
+
+
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
                     });
-                    //inkrement= idRez++;
-                    //r.setId(inkrement);
-                        Pomocna p1 = rzt.findRez();
 
 
-                        r.setId(p1.getIdRez());
-                        Toast.makeText(getContext(),Integer.toString(r.getId()),Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getContext(),p1.getVreme(),Toast.LENGTH_SHORT).show();//ovo se prvo doda pa dodavanje u bazu to jr ptoblrms
-                        t.setDatum(p1.getDatum());
-                        t.setVreme(p1.getVreme());
-                        r.setAktivna(true);
-                        r.setEmailKorisnika(ulogovani.getEmail());
-                        r.setU(u);
-                        r.setT(t);
-                        FirebaseDatabase.getInstance().getReference("Rezervacije").push().setValue(r);
 
 
 
@@ -223,8 +198,11 @@ public class Termini extends Fragment {
 
             });
 
+
+
             naslov.setText(listaTermina.get(position).getDatum());
             termin.setText(listaTermina.get(position).getVreme());
+            brojac = 0;
 
 
             return convertView;

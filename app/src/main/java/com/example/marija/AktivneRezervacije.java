@@ -45,14 +45,16 @@ public class AktivneRezervacije extends Fragment {
     List<Rezervacija> lista = new ArrayList<>();
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference1;
     private DatabaseHandler databaseHandler;
-    private RezervacijeDatabaseHandler rezdatabaseHandler;
+
     String datum;
     String vreme;
     ListView lv;
     Date datumDate;
     Termin t;
     Date currentTime;
+    boolean upisan = false;
 
 
     @Nullable
@@ -63,9 +65,9 @@ public class AktivneRezervacije extends Fragment {
 
         lista = new ArrayList<>();
         databaseHandler = new DatabaseHandler(getContext());
-        rezdatabaseHandler = new RezervacijeDatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
+
        lv = (ListView)view.findViewById(R.id.listViewAktivne);
        User u = databaseHandler.findUser();
         Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
@@ -163,9 +165,7 @@ public class AktivneRezervacije extends Fragment {
             otkazi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ovo ce trebati da ide iz lokalne baze
-                       // Rezervacija r = rezdatabaseHandler.findOneReservation(Integer.parseInt(nevidljiviID.getText().toString()));
-                    Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                   Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
                             .orderByChild("id").equalTo(Integer.parseInt(nevidljiviID.getText().toString()));
 
                     query.addValueEventListener(new ValueEventListener() {
@@ -175,14 +175,18 @@ public class AktivneRezervacije extends Fragment {
                                 Rezervacija r = new Rezervacija();
                                 r = ds.getValue(Rezervacija.class);
 
-                               // t = r.getT();
-                               // dodajUFirebase(t);//ovo ne doda dont know why
+                                t = r.getT();
 
 
-                                FirebaseDatabase.getInstance().getReference("Rezervacije").child(ds.getKey()).removeValue();
+
+
+                                    databaseReference.child(ds.getKey()).removeValue();
+                                    //FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
+
 
 
                             }
+
                         }
 
                         @Override
@@ -202,8 +206,5 @@ public class AktivneRezervacije extends Fragment {
         }
     }
 
-    public void dodajUFirebase(Termin t){
 
-            firebaseDatabase.getReference("Termini").push().setValue(t);
-    }
 }

@@ -9,18 +9,20 @@ import android.util.Log;
 
 import com.example.marija.Models.Pomocna;
 import com.example.marija.Models.Rezervacija;
+import com.example.marija.Models.Termin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RezervacijaZaTermin extends SQLiteOpenHelper {
 
-    private static final String tabelaRezervacija="ajproradi";
+    private static final String tabelaRezervacija="novanovaa";
     private static final String ID="ID";
     private static final String datum="datum";
     private static final String vreme="vreme";
-    private static final String idRez="idRez";
-    //private static final String idTermina="idTermina";
+    private static final String idUsluge="idUsluge";
+    private static final String slobodan = "slobodan";
+    private static final String idTermin = "idTermin";
 
 
     public RezervacijaZaTermin(Context context) {
@@ -29,7 +31,7 @@ public class RezervacijaZaTermin extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createRezervacijaTable="CREATE TABLE "+tabelaRezervacija+" " +
-                "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +datum+" TEXT,"+vreme+" TEXT, "+idRez+" TEXT)";
+                "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +datum+" TEXT,"+vreme+" TEXT, "+idUsluge+" TEXT, "+slobodan+"TEXT, "+idTermin+"TEXT)";
         db.execSQL(createRezervacijaTable);
     }
 
@@ -47,22 +49,23 @@ public class RezervacijaZaTermin extends SQLiteOpenHelper {
         db.execSQL("delete from "+tabelaRezervacija);
     }
 
-    public boolean addRezervacija(Pomocna p,int idrez){
+    public boolean addRezervacija(Termin t){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        idrez++;
-        Log.d("VREDNOSTTTTT",Integer.toString(idrez));
-        contentValues.put(datum,p.getDatum());
-        contentValues.put(vreme,p.getVreme());
-        contentValues.put(idRez,idrez);
+        Log.d("HERE I AM",t.getDatum());
+        contentValues.put(datum,t.getDatum());
+        contentValues.put(vreme,t.getVreme());
+        contentValues.put(idUsluge,t.getIdUsluge());
+        contentValues.put(slobodan,t.isSlobodan());
+        contentValues.put(idTermin,t.getId());
         long result = db.insert(tabelaRezervacija, null, contentValues);
 
         return result != -1;
 
     }
 
-    public Pomocna findRez(){
-        Pomocna p = new Pomocna();
+    public Termin findRez(){
+      Termin t = new Termin();
         String USERS_SELECT_QUERY =
                 String.format("SELECT * FROM %s;",
                         tabelaRezervacija);
@@ -74,10 +77,11 @@ public class RezervacijaZaTermin extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
 
-                     p.setIdRez(Integer.parseInt(cursor.getString(cursor.getColumnIndex(idRez))));
-                     p.setDatum(cursor.getString(cursor.getColumnIndex(datum)));
-                     p.setVreme(cursor.getString(cursor.getColumnIndex(vreme)));
-                     p.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID))));
+                     t.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(idTermin))));
+                     t.setDatum(cursor.getString(cursor.getColumnIndex(datum)));
+                     t.setVreme(cursor.getString(cursor.getColumnIndex(vreme)));
+                     t.setSlobodan(Boolean.parseBoolean(String.valueOf(cursor.getColumnIndex(slobodan))));
+                     t.setIdUsluge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(idUsluge))));
 
 
                 } while(cursor.moveToNext());
@@ -91,7 +95,7 @@ public class RezervacijaZaTermin extends SQLiteOpenHelper {
         }
 
 
-        return p;
+        return t;
     }
 
 
