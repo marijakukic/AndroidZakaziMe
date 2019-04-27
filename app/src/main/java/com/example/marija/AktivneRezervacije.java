@@ -181,7 +181,7 @@ public class AktivneRezervacije extends Fragment {
 
 
                                     databaseReference.child(ds.getKey()).removeValue();
-                                    //FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
+                                FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
 
 
 
