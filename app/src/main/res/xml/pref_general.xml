@@ -3,7 +3,6 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
         android:inputType="textCapWords"
         android:key="example1"
         android:maxLines="1"
@@ -14,13 +13,19 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:inputType="textCapWords"
+        android:inputType="textPassword"
         android:key="example2"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:icon="@drawable/password"
-        android:title="@string/promeni_lozinku" />
+        android:title="@string/promeni_lozinku">
+
+
+    </EditTextPreference>
+
+
+
 
 
     <!--<SwitchPreference
