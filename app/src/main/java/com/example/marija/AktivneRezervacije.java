@@ -68,23 +68,23 @@ public class AktivneRezervacije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
 
-        lv = (ListView)view.findViewById(R.id.listViewAktivne);
-        User u = databaseHandler.findUser();
+       lv = (ListView)view.findViewById(R.id.listViewAktivne);
+       User u = databaseHandler.findUser();
         Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
         String dateString = format.format( currentTime );
         String [] datumivreme = dateString.split(" ");
-        datum = datumivreme[0];
-        vreme = datumivreme[1];
+         datum = datumivreme[0];
+         vreme = datumivreme[1];
 
 
 
-        try {
-            datumDate = new SimpleDateFormat("dd.MM.yyyy.").parse(datum);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+             try {
+                 datumDate = new SimpleDateFormat("dd.MM.yyyy.").parse(datum);
+             } catch (ParseException e) {
+                 e.printStackTrace();
+             }
 
 
         Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
@@ -165,7 +165,7 @@ public class AktivneRezervacije extends Fragment {
             otkazi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                   Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
                             .orderByChild("id").equalTo(Integer.parseInt(nevidljiviID.getText().toString()));
 
                     query.addValueEventListener(new ValueEventListener() {
@@ -180,8 +180,8 @@ public class AktivneRezervacije extends Fragment {
 
 
 
-                                databaseReference.child(ds.getKey()).removeValue();
-                                //FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
+                                    databaseReference.child(ds.getKey()).removeValue();
+                                FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
 
 
 

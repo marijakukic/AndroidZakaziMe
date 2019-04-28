@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
 
         String n = "naziv_0";
-        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.naziv_0,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
+        Usluga u1 = new Usluga(0,"Belle Femme Frizer",R.drawable.cool_pic,"Najpovoljnije sisanje u gradu","Novi Sad","Lepota",
                 "Partizanskih baza 2 Novi Sad","Feniranje 100 din:Sisanje 300 din:Farbanje 400 din",
                 "Ponedeljak - Petak 09:00 - 19:00/Subota 10:00 - 16:00/Nedelja neradna",
                 "Gotovina,kartica");

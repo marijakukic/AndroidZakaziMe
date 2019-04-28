@@ -60,7 +60,7 @@ public class Termini extends Fragment {
         View view = inflater.inflate(R.layout.termini,container,false);
         r = new Rezervacija();
         lv = (ListView)view.findViewById(R.id.listViewTermini);
-
+        databaseReference =  FirebaseDatabase.getInstance().getReference("Termini");
         id_usluge = getArguments().getInt("ID_usluge");
         databaseHandler = new DatabaseHandler(getContext());
         rzt = new RezervacijaZaTermin(getContext());
@@ -69,6 +69,8 @@ public class Termini extends Fragment {
         listaRez = new ArrayList<Rezervacija>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Termini");
+
+
         Query q =  FirebaseDatabase.getInstance().getReference("Usluge")
                 .orderByChild("id").equalTo(id_usluge);
         q.addValueEventListener(new ValueEventListener() {
@@ -87,7 +89,7 @@ public class Termini extends Fragment {
             }
         });
 
-        Query query = FirebaseDatabase.getInstance().getReference("Termini")
+        Query query = databaseReference
                 .orderByChild("idUsluge").equalTo(id_usluge);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -114,7 +116,7 @@ public class Termini extends Fragment {
         return view;
     }
 
-    public class CustomAdapter extends BaseAdapter {
+     class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -146,16 +148,17 @@ public class Termini extends Fragment {
                     idTermina = listaTermina.get(position).getId();
                      p = new Pomocna();
 
-                    Query query = FirebaseDatabase.getInstance().getReference("Termini")
+                    Query query = databaseReference
                             .orderByChild("id").equalTo(idTermina);
 
-                    query.addValueEventListener(new ValueEventListener() {
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 t = ds.getValue(Termin.class);
 
-                                    FirebaseDatabase.getInstance().getReference("Termini").child(ds.getKey()).removeValue();
+
+                                    databaseReference.child(ds.getKey()).removeValue();
 
                                     r.setT(t);
                                     r.setU(u);
