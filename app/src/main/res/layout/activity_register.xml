@@ -115,13 +115,27 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
+                android:id="@+id/izaberiSliku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Izaberite profilnu sliku"
+               />
+
+            <ImageView
+                android:id="@+id/profilnaSlika"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/izaberiSliku"/>
+
+            <Button
                 android:id="@+id/registrujSeBtn"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/register_string"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_below="@+id/profilnaSlika"/>
 
         </LinearLayout>
     </ScrollView>
