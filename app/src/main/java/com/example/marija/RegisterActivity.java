@@ -1,7 +1,10 @@
 package com.example.marija;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,9 +13,12 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.MimeTypeMap;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +26,8 @@ import com.example.marija.Models.Rezervacija;
 import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mPrezimeView;
     private EditText mKorisnickoImeView;
     private View registerFormView;
-    private Button btnAdd;
+    private Button btnAdd,btnChoose;
     private DatabaseHandler mDataBaseHelper = new DatabaseHandler(this);
     private RezervacijeDatabaseHandler rezDataBaseHelper = new RezervacijeDatabaseHandler(this);
     private FirebaseDatabase firebaseDatabase;
@@ -51,6 +63,10 @@ public class RegisterActivity extends AppCompatActivity {
     String entryPass ;
     String entryPrezime ;
     private boolean korisnikPostoji;
+    private StorageReference mStorageRef;
+    private ImageView profilna;
+    public Uri imguri;
+    private StorageTask uploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +74,18 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         setupActionBar();
         mEmailView = findViewById(R.id.emailRegister);
+
         btnAdd = findViewById(R.id.registrujSeBtn);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("Korisnici");
+        profilna = findViewById(R.id.profilnaSlika);
+        btnChoose = findViewById(R.id.izaberiSliku);
+        btnChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Filechooser();
+            }
+        });
 
         mPasswordView = findViewById(R.id.password);
         mPasswordConfirmedView = findViewById(R.id.confirmedPass);
@@ -98,8 +125,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         if( dataSnapshot.getChildrenCount() == 0) {
-                                                            addUserToFirebase();
+                                                            User novi = addUserToFirebase();
                                                             korisnikPostoji = AddData(entryname, entrykorname, entryMail, entryPass, entryPass);
+                                                            if(uploadTask != null && uploadTask.isInProgress()) {
+                                                                Toast.makeText(RegisterActivity.this,"Registracija je u toku!",Toast.LENGTH_SHORT).show();
+                                                            } else {
+                    // mora neka validacijaa!
+                                                                Fileuploader(novi.getEmail());
+                                                            }
                                                             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                                                         }
                                                             if(korisnikPostoji){
@@ -113,22 +146,59 @@ public class RegisterActivity extends AppCompatActivity {
 
                                                     }
                                                 });
-
                     }
 
-                    //startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 }
             });
 
+    }
+
+    private void Fileuploader(String email) {
+        StorageReference riversRef = mStorageRef.child(email+"."+getExtention(imguri));
 
 
+        uploadTask = riversRef.putFile(imguri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Toast.makeText(RegisterActivity.this,"Slika je uploadovana uspesno!",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
 
     }
 
+    private String getExtention(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
+        return  mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
 
+    private void Filechooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,1);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null) {
+            imguri=data.getData();
+            profilna.setImageURI(imguri);
+        }
+    }
 
-    private void addUserToFirebase() {
+    private User addUserToFirebase() {
         String entryname = mImeView.getText().toString();
         String entrykorname = mKorisnickoImeView.getText().toString();
         String entryMail = mEmailView.getText().toString();
@@ -167,7 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseDatabase.getReference("Korisnici").push().setValue(u);
         //ne postavljamo id
 
-
+        return u;
 
 
     }

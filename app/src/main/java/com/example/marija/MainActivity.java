@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
 import com.example.marija.Models.Termin;
@@ -37,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements
 
     TextView nevidljiviIDusluge;
      int ID_usluge;
+    StorageReference storageReference;
+    StorageReference storageReference1;
 
 
     @Override
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         list = new ArrayList<Usluga>();
         listener = new Listener();
+        storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
 
         String n = "naziv_0";
@@ -249,14 +255,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void addUslugaToFireBase(List<Usluga> listaUsluga){
-
-
         for(Usluga u : listaUsluga) {
-
              databaseReference.push().setValue(u);
-
         }
-
     }
 
 
@@ -267,8 +268,6 @@ public class MainActivity extends AppCompatActivity implements
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
-
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -467,7 +466,14 @@ public class MainActivity extends AppCompatActivity implements
             ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera1);
             navigation.setText(u.getEmail());
             navigation1.setText(u.getKoriscnickoIme());
-            slikaUsera.setImageResource(R.drawable.user);
+            storageReference1 = storageReference.child(u.getEmail()+".jpg");
+
+            GlideApp.with(MainActivity.this)
+                    .load(storageReference1)
+                    .centerCrop()
+                    //.placeholder(R.drawable.loading_spinner)
+                    .into(slikaUsera);
+           // slikaUsera.setImageResource(R.drawable.user);
 
 
             return convertView;
