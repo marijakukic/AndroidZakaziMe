@@ -1,12 +1,14 @@
 package com.example.marija;
 
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 public class OpisTab extends Fragment {
@@ -93,6 +97,8 @@ public class OpisTab extends Fragment {
                 }
             });
         }
+        Button not = (Button)view.findViewById(R.id.notifikacija);
+
 
         return view;
     }
