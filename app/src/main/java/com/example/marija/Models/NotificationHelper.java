@@ -40,9 +40,9 @@ public class NotificationHelper extends ContextWrapper {
         return manager;
     }
 
-    public Notification.Builder getNotification(String title){
+    public Notification.Builder getNotification(String title,String title2){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return new Notification.Builder(getApplicationContext(),EDMT_CHANNEL_ID).setContentText("Termin").setContentTitle("Ponedeljak u 12:00h").setAutoCancel(true).setSmallIcon(R.drawable.sat);
+            return new Notification.Builder(getApplicationContext(),EDMT_CHANNEL_ID).setContentText(title).setContentTitle(title2).setAutoCancel(true).setSmallIcon(R.drawable.sat);
         }
         return null;
     }
