@@ -97,7 +97,7 @@ public class OpisTab extends Fragment {
                 }
             });
         }
-        Button not = (Button)view.findViewById(R.id.notifikacija);
+
 
 
         return view;

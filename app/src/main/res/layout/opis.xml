@@ -62,11 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="Vidi lokaciju" />
 
-            <Button
-                android:id="@+id/notifikacija"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="notifikacija" />
+
 
 
 

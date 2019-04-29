@@ -5,6 +5,8 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="notifications_new_message"
+        android:summaryOn="Alarm podesen da vas obavesti"
+        android:summaryOff="Alarm ugasen. Necete biti obavesteni"
         android:title="@string/pref_title_new_message_notifications" />
 
     <ListPreference

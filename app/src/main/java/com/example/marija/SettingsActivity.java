@@ -1,8 +1,12 @@
 package com.example.marija;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -13,6 +17,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -25,8 +30,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.marija.Models.NotificationHelper;
+import com.example.marija.Models.Rezervacija;
+import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +43,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.prefs.Preferences;
 
 
@@ -110,8 +125,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setupActionBar();
+
+
     }
 
     private void setupActionBar() {
@@ -237,6 +256,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
 
+
+
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
@@ -254,15 +275,147 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
+        SharedPreferences sharedPreferences;
+        ArrayList<Rezervacija> lista;
+        Date currentTime;
+        Context c11;
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
             setHasOptionsMenu(true);
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            SwitchPreference switchPreference = (SwitchPreference)findPreference("notifications_new_message");
+            switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final boolean isChecked = sharedPreferences.getBoolean("notifications_new_message",false);
+                    if(!isChecked){
+                        /*NotificationHelper notificationHelper = new NotificationHelper(getActivity());
+                          Notification.Builder builder = notificationHelper.getNotification("Podsetnik");
+                          notificationHelper.getManager().notify(new Random().nextInt(), builder.build());*/
+                                setAlarm(getActivity());
+
+
+                                  }else{
+                                    cancelAlarm(getActivity());
+
+                                  }
+                    return true;
+                }
+
+            });
             bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
             bindPreferenceSummaryToValue(findPreference("obavestenjaKeys"));
 
+
         }
+
+        public void cancelAlarm(Context c){
+            AlarmManager alarmManager = (AlarmManager)c.getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(c,AlertReciever.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c,1,intent,0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.cancel(pendingIntent);
+
+            }
+
+        }
+
+        public void setAlarmForReservations(Context c){
+            c11=c;
+            lista= new ArrayList<>();
+            currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
+            String dateString = format.format( currentTime );
+            String [] datumivreme = dateString.split(" ");
+            String datum = datumivreme[0];
+            String vreme = datumivreme[1];
+            DatabaseHandler databaseHandler = new DatabaseHandler(getActivity());
+            User u = databaseHandler.findUser();
+            Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                    .orderByChild("emailKorisnika").equalTo(u.getEmail());
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    lista.clear();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        Rezervacija r = ds.getValue(Rezervacija.class);
+                        Date datumTermina=null;
+                        try {
+                            datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(r.getT().getDatum()+" "+r.getT().getVreme());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(datumTermina.compareTo(currentTime)>0) {
+
+                            lista.add(r);
+                        }
+
+
+                    }
+
+                    for(int i =0;i<lista.size();i++){
+                        Termin t = lista.get(i).getT();
+                        String[] splitovanje = t.getVreme().split(":");
+                        int sati =Integer.parseInt(splitovanje[0]) ;
+                        int min = Integer.parseInt(splitovanje[1]) ;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.SECOND,0);
+                        calendar.set(Calendar.MINUTE,min);
+                        calendar.set(Calendar.HOUR,sati);
+                        if (sati == 0) {
+                            calendar.set(Calendar.AM_PM,Calendar.AM);
+                        } else if (i < 12) {
+                            calendar.set(Calendar.AM_PM,Calendar.AM);
+                        } else if (i == 12) {
+                            calendar.set(Calendar.AM_PM,Calendar.PM);
+                        } else {
+                            calendar.set(Calendar.AM_PM,Calendar.PM);
+                        }
+
+                        AlarmManager alarmManager = (AlarmManager)c11.getSystemService(ALARM_SERVICE);
+                        Intent intent = new Intent(c11,AlertReciever.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(c11,1,intent,0);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+                        }
+                        Log.d("USO SAM OVDE","NOTIFIKACIJA");
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+        }
+
+        public void setAlarm(Context c){
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.SECOND,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.HOUR,8);
+            calendar.set( Calendar.AM_PM, Calendar.PM);
+            AlarmManager alarmManager = (AlarmManager)c.getSystemService(ALARM_SERVICE);
+            Intent intent = new Intent(c,AlertReciever.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(c,1,intent,0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            }
+            Log.d("USO SAM OVDE","NOTIFIKACIJA");
+
+
+        }
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
