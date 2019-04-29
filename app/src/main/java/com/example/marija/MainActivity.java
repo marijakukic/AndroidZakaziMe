@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,15 +19,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
-import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
@@ -41,9 +38,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -471,9 +465,7 @@ public class MainActivity extends AppCompatActivity implements
             GlideApp.with(MainActivity.this)
                     .load(storageReference1)
                     .centerCrop()
-                    //.placeholder(R.drawable.loading_spinner)
                     .into(slikaUsera);
-           // slikaUsera.setImageResource(R.drawable.user);
 
 
             return convertView;

@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -36,7 +38,7 @@ public class Recenzije extends Fragment {
    /* String[] komentari = {"Jako sam zadovoljan","Super usluga","Jako ljubazno osoblje"};
     String[] datumi ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
     String[] korisnici={"Pera Peric","Mika Mikic","Ana Anic"};*/
-   int [] slike = {R.drawable.user1,R.drawable.user2,R.drawable.user3};
+   //int [] slike = {R.drawable.user1,R.drawable.user2,R.drawable.user3};
    private List<Recenzija> lista;
 
     private FirebaseDatabase firebaseDatabase;
@@ -47,6 +49,8 @@ public class Recenzije extends Fragment {
     int id_usluge_kliknute;
     Date currentDate;
     ListView lv;
+    StorageReference storageReference;
+    StorageReference storageReference1;
 
     @Nullable
     @Override
@@ -57,6 +61,7 @@ public class Recenzije extends Fragment {
 
         id_usluge_kliknute = getArguments().getInt("ID_usluge");
 
+        storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
         uslugaDatabaseHandler = new UslugaDatabaseHandler(getContext());
         idUsluge = uslugaDatabaseHandler.findUsluga();
         databaseHandler = new DatabaseHandler(getContext());
@@ -117,7 +122,13 @@ public class Recenzije extends Fragment {
             komentar.setText(lista.get(position).getOcena() + "    "+lista.get(position).getKomentar());
             korisnik.setText(lista.get(position).getEmailKorinika());
             datum.setText(lista.get(position).getDatum());
-            slika.setImageResource(slike[position]);
+
+            storageReference1 = storageReference.child(lista.get(position).getEmailKorinika()+".jpg");
+
+            GlideApp.with(getContext())
+                    .load(storageReference1)
+                    .centerCrop()
+                    .into(slika);
 
 
 

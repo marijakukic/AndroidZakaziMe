@@ -3,11 +3,11 @@ package com.example.marija;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -18,7 +18,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView profilna;
     public Uri imguri;
     private StorageTask uploadTask;
+    StorageReference riversRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,10 +152,20 @@ public class RegisterActivity extends AppCompatActivity {
             });
 
     }
+    public String getURLForResource (int resourceId) {
+        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
+    }
+
 
     private void Fileuploader(String email) {
-        StorageReference riversRef = mStorageRef.child(email+"."+getExtention(imguri));
+        if (Uri.EMPTY == imguri || imguri == null) {
 
+            imguri = Uri.parse(getURLForResource(R.drawable.defaultuser));
+            profilna.setImageURI(imguri);
+            riversRef = mStorageRef.child(email+".jpg");
+        } else {
+            riversRef = mStorageRef.child(email+"."+getExtention(imguri));
+        }
 
         uploadTask = riversRef.putFile(imguri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -180,6 +190,8 @@ public class RegisterActivity extends AppCompatActivity {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
         return  mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+
+
     }
 
     private void Filechooser() {
