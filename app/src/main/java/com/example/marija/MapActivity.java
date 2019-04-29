@@ -51,6 +51,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.google.android.gms.location.places.Places;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener{
 
@@ -58,6 +60,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    private GoogleMap mMap;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -98,7 +101,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
-    private GoogleMap mMap;
+
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
@@ -116,6 +119,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
 
+
+
     }
 
     private void init(){
@@ -129,6 +134,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .build();
 
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+
+
 
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
