@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.marija.Models.NotificationHelper;
 
@@ -16,9 +17,9 @@ public class AlertReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationHelper notificationHelper = new NotificationHelper(context);
 
-        Notification.Builder builder = notificationHelper.getNotification("Podsetnik");
+        Notification.Builder builder = notificationHelper.getNotification(intent.getStringExtra("datum"),intent.getStringExtra("vreme"));
         notificationHelper.getManager().notify(new Random().nextInt(), builder.build());
-        Log.d("USAO SAM","U RECIEVER");
+
 
     }
 }
