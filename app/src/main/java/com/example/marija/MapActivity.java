@@ -13,19 +13,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -61,6 +56,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
     private GoogleMap mMap;
+    int id_usluge;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -69,7 +65,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
-            getDeviceLocation();
+            //getDeviceLocation();
+            if (id_usluge == 0) {
+                moveCamera(new LatLng(45.252316, 19.804043), DEFAULT_ZOOM,
+                        "Belle Femme");
+            } else if (id_usluge == 1) {
+                moveCamera(new LatLng(45.246394, 19.834467), DEFAULT_ZOOM,
+                        "Words and Friends");
+            } else if (id_usluge == 2) {
+                moveCamera(new LatLng(44.805339, 20.473941), DEFAULT_ZOOM,
+                        "Privatni casovi matematike");
+            }
+            else if (id_usluge == 3) {
+                moveCamera(new LatLng(45.240344, 19.832929), DEFAULT_ZOOM,
+                        "Zubarska ordinacija dr. Bosnjak");
+            }
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -112,10 +122,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        //mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         mGps = (ImageView) findViewById(R.id.ic_gps);
         mInfo = (ImageView) findViewById(R.id.place_info);
-        mPlacePicker = (ImageView) findViewById(R.id.place_picker);
+        //mPlacePicker = (ImageView) findViewById(R.id.place_picker);
+
+        id_usluge = getIntent().getExtras().getInt("id_usluge");
 
         getLocationPermission();
 
@@ -133,16 +145,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
-        mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+       // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
 
 
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
-                LAT_LNG_BOUNDS, null);
+       // mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
+         //       LAT_LNG_BOUNDS, null);
 
-        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
+        //mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH
@@ -156,7 +168,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 return false;
             }
-        });
+        }); */
 
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,8 +181,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked place info");
-                try{
+             /*       try{
                     if(mMarker.isInfoWindowShown()){
                         mMarker.hideInfoWindow();
                     }else{
@@ -180,10 +191,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }catch (NullPointerException e){
                     Log.e(TAG, "onClick: NullPointerException: " + e.getMessage() );
                 }
+                */
+                if (id_usluge == 0) {
+                    moveCamera(new LatLng(45.252316, 19.804043), DEFAULT_ZOOM,
+                            "Belle Femme");
+                } else if (id_usluge == 1) {
+                    moveCamera(new LatLng(45.246394, 19.834467), DEFAULT_ZOOM,
+                            "Words and Friends");
+                } else if (id_usluge == 2) {
+                    moveCamera(new LatLng(44.805339, 20.473941), DEFAULT_ZOOM,
+                            "Privatni casovi matematike");
+                }
+                else if (id_usluge == 3) {
+                    moveCamera(new LatLng(45.240344, 19.832929), DEFAULT_ZOOM,
+                            "Zubarska ordinacija dr. Bosnjak");
+                }
+
+
             }
         });
 
-        mPlacePicker.setOnClickListener(new View.OnClickListener() {
+        /*mPlacePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -197,7 +225,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Log.e(TAG, "onClick: GooglePlayServicesNotAvailableException: " + e.getMessage() );
                 }
             }
-        });
+        });*/
 
         hideSoftKeyboard();
     }
