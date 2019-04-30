@@ -311,11 +311,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             public boolean onPreferenceChange(Preference preference, Object newValue) {
                                 userSelectedValue = (String) newValue;
                                 Toast.makeText(getActivity(),"SELEKTOVANO:"+userSelectedValue,Toast.LENGTH_SHORT).show();
+                                setAlarmForReservations(getActivity(),userSelectedValue);
 
                                 return true;
                             }
                         });
-                        setAlarmForReservations(getActivity());
 
 
 
@@ -332,7 +332,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
                                             }
-                                            FirebaseDatabase.getInstance().getReference("Pomocna").removeValue();
+
                                             cancelAlarm(getActivity(),brojac);//popravi ovo da radi,npr sacuvas duzinu liste i te ponistis
                                         }
 
@@ -355,6 +355,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
         public void cancelAlarm(Context c,int brojac){
+
             for(int i=0;i<brojac;i++) {
                 AlarmManager alarmManager = (AlarmManager) c.getSystemService(ALARM_SERVICE);
                 Intent intent = new Intent(c, AlertReciever.class);
@@ -372,7 +373,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
 
-        public void setAlarmForReservations(Context c){
+        public void setAlarmForReservations(Context c, final String selektovano){
             c11=c;
             lista= new ArrayList<>();
             currentTime = Calendar.getInstance().getTime();
@@ -408,6 +409,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
                     }
+                    FirebaseDatabase.getInstance().getReference("Pomocna").removeValue();
                     Pomocna p = new Pomocna();
                     p.setId(lista.size());//mozda se dodaje vise nego sto treba
                     FirebaseDatabase.getInstance().getReference("Pomocna").push().setValue(p);
@@ -467,10 +469,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     else if(sati==22){sati=10;}
                     else if(sati==23){sati=11;}
                     //ne stavljaj 24 ili 12 sati
-
-                            calendar.set(Calendar.SECOND, 0);
-                            calendar.set(Calendar.MINUTE, min);
-                            calendar.set(Calendar.HOUR, sati);
+                            if(selektovano.equals("tad")) {
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min);
+                                calendar.set(Calendar.HOUR, sati);
+                            }else if(selektovano.equals("15 minutes")){
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min-15);
+                                calendar.set(Calendar.HOUR, sati);
+                            }else if(selektovano.equals("30 minutes")){
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min-30);
+                                calendar.set(Calendar.HOUR, sati);
+                            }else if(selektovano.equals("1 hour")){
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min);
+                                calendar.set(Calendar.HOUR, sati-1);
+                            }else if(selektovano.equals("3 hours")){
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min);
+                                calendar.set(Calendar.HOUR, sati-3);
+                            }else if(selektovano.equals("6 hours")){
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MINUTE, min);
+                                calendar.set(Calendar.HOUR, sati-6);
+                            }
 
 
                     AlarmManager alarmManager = (AlarmManager) c11.getSystemService(ALARM_SERVICE);
