@@ -1,5 +1,7 @@
 package com.example.marija;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class Recenzije extends Fragment {
 
@@ -67,6 +71,13 @@ public class Recenzije extends Fragment {
         databaseHandler = new DatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Recenzije");
+        if(checkNet()){
+            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
+        }
+
 
         Query query = FirebaseDatabase.getInstance().getReference("Recenzije")
                 .orderByChild("idUsluge").equalTo(idUsluge);
@@ -135,5 +146,27 @@ public class Recenzije extends Fragment {
 
             return convertView;
         }
+    }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
     }
 }

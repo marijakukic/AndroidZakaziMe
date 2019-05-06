@@ -3,6 +3,8 @@ package com.example.marija;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 public class DialogOceni extends AppCompatDialogFragment {
     Button btn;
     RatingBar ratingBar;
@@ -50,6 +54,7 @@ public class DialogOceni extends AppCompatDialogFragment {
         databaseHandler= new DatabaseHandler(getContext());
         rezervacijeDatabaseHandler= new RezervacijeDatabaseHandler(getContext());
         final User ulogovaniKorisnik = databaseHandler.findUser();
+
         btn = (Button)view.findViewById(R.id.recenzija);
         ratingBar=(RatingBar)view.findViewById(R.id.ratingBar);
         komentarView=(EditText)view.findViewById(R.id.komentar);
@@ -104,4 +109,27 @@ public class DialogOceni extends AppCompatDialogFragment {
         return builder.create();
 
     }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.example.marija;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,6 +38,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Calendar;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+import static android.support.v4.content.ContextCompat.getSystemService;
+
 //TO DO : ostalo je da se doda poredjenje s vremenom to moramo videti sa bazom kako cemo
 //bolje mozda da cuvamo odma tu i vreme u jednom polju da ne razdvajamo
 public class AktivneRezervacije extends Fragment {
@@ -68,7 +73,15 @@ public class AktivneRezervacije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
 
-       lv = (ListView)view.findViewById(R.id.listViewAktivne);
+        if(checkNet()){
+            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
+        }
+
+
+        lv = (ListView)view.findViewById(R.id.listViewAktivne);
        User u = databaseHandler.findUser();
         Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
@@ -125,6 +138,8 @@ public class AktivneRezervacije extends Fragment {
 
         return view;
     }
+
+
 
     public User findLoggedUser(){
         User u = databaseHandler.findUser();
@@ -205,6 +220,31 @@ public class AktivneRezervacije extends Fragment {
             return convertView;
         }
     }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
+    }
+
+
+
 
 
 }

@@ -1,9 +1,16 @@
 package com.example.marija;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +33,9 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
+import com.example.marija.Models.Recenzija;
+import com.example.marija.Models.Rezervacija;
+import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
 import com.example.marija.Models.Usluga;
 import com.google.firebase.FirebaseApp;
@@ -41,6 +51,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
     private ListView lv;
@@ -54,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements
     private ImageView imageView;
     private TextView name;
     private TextView description;
-
+    ReservationDatabaseHandler reservationDatabaseHandler = new ReservationDatabaseHandler(this);
     private ArrayList<Usluga> list;
     private ArrayList<Usluga> konacnaListaUsluga = new ArrayList<Usluga>();
     private ArrayList<Usluga> novaListaUsluga = new ArrayList<Usluga>();
@@ -67,13 +78,13 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mSpinnerInitialized;
     CustomAdapter customAdapter;
     TextView nevidljivi;
-
+    RecenzijeDatabaseHandler rdh = new RecenzijeDatabaseHandler(this);
     TextView nevidljiviIDusluge;
      int ID_usluge;
     StorageReference storageReference;
     StorageReference storageReference1;
-
-
+    TerminiDatabaseHandler tdh = new TerminiDatabaseHandler(this);
+    BroadcastReceiver broadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements
         list = new ArrayList<Usluga>();
         listener = new Listener();
         storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
+        if(checkNet()){
+            Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+        }
+        punjenjeLokalneBaze();
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
 
         String n = "naziv_0";
@@ -248,11 +266,37 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+
+
     public void addUslugaToFireBase(List<Usluga> listaUsluga){
         for(Usluga u : listaUsluga) {
              databaseReference.push().setValue(u);
         }
     }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
+    }
+
+
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -488,5 +532,75 @@ public class MainActivity extends AppCompatActivity implements
 
             //return this;
         }
+    }
+
+    public void punjenjeLokalneBaze(){
+        User ulogovani = mDataBaseHelper.findUser();
+
+        //treba da vidi sve termine i sve recenzije
+        tdh.deleteAll();
+        Query q = FirebaseDatabase.getInstance().getReference("Termini");
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Termin t = new Termin();
+                    t= ds.getValue(Termin.class);
+                    try {
+                        tdh.addTermin(t.getDatum(), String.valueOf(t.getId()), String.valueOf(t.getIdUsluge()), t.getVreme());
+                    }catch (Exception e){}
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+       rdh.deleteAll();
+        Query q1 = FirebaseDatabase.getInstance().getReference("Recenzije");
+        q1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Recenzija rr = new Recenzija();
+                            rr = ds.getValue(Recenzija.class);
+                    try {
+                        rdh.addRecenzija(rr.getDatum(), rr.getEmailKorinika(), String.valueOf(rr.getIdUsluge()), rr.getKomentar(), rr.getOcena());
+                    }catch(Exception e){}
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //rezervacije mu trebaju samo njegove
+       reservationDatabaseHandler.deleteAll();
+        Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
+                .orderByChild("emailKorisnika").equalTo(ulogovani.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        Rezervacija r = new Rezervacija();
+                        r = ds.getValue(Rezervacija.class);
+                        reservationDatabaseHandler.addTermin(r.getEmailKorisnika(),r.getId(),r.isAktivna(),r.getU().getID(),r.getT().getId());
+
+                    }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

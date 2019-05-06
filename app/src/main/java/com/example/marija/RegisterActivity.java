@@ -2,6 +2,8 @@ package com.example.marija;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -73,6 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setupActionBar();
+        if(checkNet()){
+            Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+        }
         mEmailView = findViewById(R.id.emailRegister);
 
         btnAdd = findViewById(R.id.registrujSeBtn);
@@ -425,6 +433,30 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
+    }
+
+
 
 
 

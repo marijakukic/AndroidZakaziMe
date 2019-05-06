@@ -2,6 +2,8 @@ package com.example.marija;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.marija.Models.Usluga;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,14 @@ public class ListItemActivity extends AppCompatActivity {
         setViewPager(viewPager);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        if(checkNet()){
+            Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+        }
+
 
 
         if(bundle!=null)
@@ -66,6 +77,28 @@ public class ListItemActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public boolean checkNet(){
+        boolean have_WIFI = false;
+        boolean have_mobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo networkInfo: networkInfos){
+            if(networkInfo.getTypeName().equalsIgnoreCase("WIFI")){
+                if(networkInfo.isConnected()){
+                    have_WIFI = true;
+                }
+            }
+            if(networkInfo.getTypeName().equalsIgnoreCase("MOBILE")){
+                if(networkInfo.isConnected()){
+                    have_mobile = true;
+                }
+            }
+        }
+
+        return have_mobile || have_mobile;
     }
 
     private void setViewPager(ViewPager viewPager){

@@ -225,7 +225,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-
     public void addTerminiToFirebase(){
         //ovde treba provera ako se nalazi termiin u rezervacijama da se ne ubaci
         Termin t = new Termin(0,"30.06.2019.","12:00",true,0);
