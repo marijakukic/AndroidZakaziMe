@@ -1,5 +1,6 @@
 package com.example.marija;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -7,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +21,8 @@ import android.widget.Toast;
 import com.example.marija.Models.Rezervacija;
 import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
-
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,14 +30,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Calendar;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static android.support.v4.content.ContextCompat.getSystemService;
@@ -149,6 +148,10 @@ public class AktivneRezervacije extends Fragment {
 
     class CustomAdapter extends BaseAdapter {
 
+        private static final String TAG = "AktivneRFragment";
+
+        private static final int ERROR_DIALOG_REQUEST = 9001;
+
         @Override
         public int getCount() {
 
@@ -166,16 +169,30 @@ public class AktivneRezervacije extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = getLayoutInflater().inflate(R.layout.activity_list_item_zakazivanja, null);
             final TextView nevidljiviID = (TextView) convertView.findViewById(R.id.nevidljivi);
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView sati=(TextView)convertView.findViewById(R.id.sati);
             Button otkazi = (Button)convertView.findViewById(R.id.otkazi);
+
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());
             sati.setText(lista.get(position).getT().getVreme());
+            if(isServicesOK()) {
+                Button lokacija = convertView.findViewById(R.id.vidi_lokaciju);
+                lokacija.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("id_usluge", lista.get(position).getU().getID());
+                        startActivity(intent);
+                    }
+                });
+
+            }
+
             nevidljiviID.setText(Integer.toString(lista.get(position).getId()));
             otkazi.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -212,12 +229,28 @@ public class AktivneRezervacije extends Fragment {
                 }
             });
 
-
-
-
-
-
             return convertView;
+        }
+
+        public boolean isServicesOK(){
+            Log.d(TAG, "isServicesOK: checking google services version");
+
+            int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity());
+
+            if(available == ConnectionResult.SUCCESS){
+                //everything is fine and the user can make map requests
+                Log.d(TAG, "isServicesOK: Google Play Services is working");
+                return true;
+            }
+            else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+                //an error occured but we can resolve it
+                Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+                Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, ERROR_DIALOG_REQUEST);
+                dialog.show();
+            }else{
+                Toast.makeText(getActivity(), "You can't make map requests", Toast.LENGTH_SHORT).show();
+            }
+            return false;
         }
     }
 
@@ -242,6 +275,7 @@ public class AktivneRezervacije extends Fragment {
 
         return have_mobile || have_mobile;
     }
+
 
 
 
