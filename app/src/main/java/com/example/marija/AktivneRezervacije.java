@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 //TO DO : ostalo je da se doda poredjenje s vremenom to moramo videti sa bazom kako cemo
 //bolje mozda da cuvamo odma tu i vreme u jednom polju da ne razdvajamo
@@ -273,7 +272,7 @@ public class AktivneRezervacije extends Fragment {
             }
         }
 
-        return have_mobile || have_mobile;
+        return have_mobile || have_WIFI;
     }
 
 

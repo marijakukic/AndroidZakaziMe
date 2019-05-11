@@ -3,12 +3,9 @@ package com.example.marija;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marija.Models.Pomocna;
-import com.example.marija.Models.Recenzija;
 import com.example.marija.Models.Rezervacija;
 import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
@@ -240,7 +236,7 @@ public class Termini extends Fragment {
             }
         }
 
-        return have_mobile || have_mobile;
+        return have_mobile || have_WIFI;
     }
 
 

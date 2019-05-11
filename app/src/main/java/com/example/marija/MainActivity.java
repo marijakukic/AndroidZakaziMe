@@ -2,15 +2,11 @@ package com.example.marija;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -293,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
-        return have_mobile || have_mobile;
+        return have_mobile || have_WIFI;
     }
 
 

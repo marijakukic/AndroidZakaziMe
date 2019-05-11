@@ -1,15 +1,14 @@
 package com.example.marija;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -98,7 +97,7 @@ public class ListItemActivity extends AppCompatActivity {
             }
         }
 
-        return have_mobile || have_mobile;
+        return have_mobile || have_WIFI;
     }
 
     private void setViewPager(ViewPager viewPager){

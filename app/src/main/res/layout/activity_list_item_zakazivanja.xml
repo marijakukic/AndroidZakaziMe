@@ -41,20 +41,22 @@
 
     <Button
         android:id="@+id/otkazi"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginLeft="4dp"
         android:layout_toRightOf="@id/termin"
-        android:text="Otkazi" />
+        android:text="Otkazi"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/vidi_lokaciju"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="4dp"
         android:layout_below="@id/otkazi"
+        android:layout_marginLeft="4dp"
         android:layout_toRightOf="@id/termin"
-        android:text="Vidi lokaciju" />
+        android:text="Lokacija"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/nevidljivi"

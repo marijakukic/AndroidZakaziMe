@@ -453,7 +453,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
 
-        return have_mobile || have_mobile;
+        return have_mobile || have_WIFI;
     }
 
 

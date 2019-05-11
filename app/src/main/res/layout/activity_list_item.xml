@@ -18,25 +18,20 @@
 
     <TextView
         android:id="@+id/description"
-        android:textSize="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/name"
+        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="-24dp"
         android:layout_toRightOf="@+id/imageView2"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:inputType="textPersonName"
         android:text="Name"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:textSize="15dp" />
 
-   <!-- <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="@+id/imageView2"
-        android:layout_toRightOf="@+id/imageView2"
-        android:text="Cancel" />-->
 
     <TextView
         android:id="@+id/name"
