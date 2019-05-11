@@ -75,15 +75,18 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setupActionBar();
+        btnAdd = findViewById(R.id.registrujSeBtn);
         if(checkNet()){
-            Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+            btnAdd.setVisibility(View.VISIBLE);
 
         }else{
             Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+            btnAdd.setVisibility(View.INVISIBLE);
         }
         mEmailView = findViewById(R.id.emailRegister);
 
-        btnAdd = findViewById(R.id.registrujSeBtn);
+
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Korisnici");
         profilna = findViewById(R.id.profilnaSlika);

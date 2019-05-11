@@ -88,6 +88,7 @@ public class ReservationDatabaseHandler extends SQLiteOpenHelper{
                     newUser.setU(u);
                     Termin t = new Termin();
                     t.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COL6))));
+                    newUser.setT(t);
 
                     termini.add(newUser);
                 } while(cursor.moveToNext());

@@ -45,7 +45,8 @@ public class ProsleRezervacije extends Fragment {
     ListView lv;
     Date datumDate;
     Date currentTime;
-     TextView nevidljiviID;
+    TextView nevidljiviID;
+    Button oceni;
 
     @Nullable
     @Override
@@ -56,12 +57,7 @@ public class ProsleRezervacije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
         databaseHandler= new DatabaseHandler(getContext());
-        if(checkNet()){
-            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
-        }else{
-            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
-        }
         rezervacijeDatabaseHandler=new RezervacijeDatabaseHandler(getContext());
         //User u = new User("krr","krr","krr@","kkkkk","krr");
         User u = databaseHandler.findUser();
@@ -143,7 +139,11 @@ public class ProsleRezervacije extends Fragment {
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView vreme =(TextView)convertView.findViewById(R.id.vreme);
-            Button oceni = (Button)convertView.findViewById(R.id.recenzija);
+            oceni = (Button)convertView.findViewById(R.id.recenzija);
+            if(checkNet())
+                oceni.setVisibility(View.VISIBLE);
+            else
+                oceni.setVisibility(View.INVISIBLE);
             nevidljiviID = (TextView) convertView.findViewById(R.id.nevidljiviIdRez);
             nevidljiviID.setText(Integer.toString(lista.get(position).getId()));
             oceni.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +214,14 @@ public class ProsleRezervacije extends Fragment {
     }
 
 
-
-
-
+    @Override
+    public void onStart(){
+        super.onStart();
+    try {
+        if (checkNet())
+            oceni.setVisibility(View.VISIBLE);
+        else
+            oceni.setVisibility(View.INVISIBLE);
+    }catch(Exception e){}
+    }
 }

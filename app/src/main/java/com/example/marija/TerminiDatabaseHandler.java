@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.marija.Models.Termin;
-import com.example.marija.Models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +98,40 @@ public class TerminiDatabaseHandler extends SQLiteOpenHelper{
     public void deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+TABLE_NAME);
+    }
+
+    public Termin findTerminById(int id){
+        Termin t = new Termin();
+        String id1= String.valueOf(id);
+        String USERS_SELECT_QUERY =
+                String.format("SELECT * FROM %s WHERE id = %s;",
+                        TABLE_NAME,id1);
+
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(USERS_SELECT_QUERY, null);
+        try {
+                if (cursor.moveToFirst()) {
+                do {
+
+                    t.setDatum(cursor.getString(cursor.getColumnIndex(COL2)));
+                    t.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COL3))));
+                    t.setIdUsluge(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COL4))));
+
+                    t.setVreme(cursor.getString(cursor.getColumnIndex(COL6)));
+
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Ne moze da se unese termin");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return t;
+
+
     }
 
 

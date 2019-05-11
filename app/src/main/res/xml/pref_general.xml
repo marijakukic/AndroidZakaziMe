@@ -21,7 +21,6 @@
         android:icon="@drawable/password"
         android:title="@string/promeni_lozinku">
 
-
     </EditTextPreference>
 
 

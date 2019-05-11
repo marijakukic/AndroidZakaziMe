@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         listener = new Listener();
         storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
         if(checkNet()){
-            Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
             Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();

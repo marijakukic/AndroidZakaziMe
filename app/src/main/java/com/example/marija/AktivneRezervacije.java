@@ -45,7 +45,7 @@ public class AktivneRezervacije extends Fragment {
 
 
 
-    List<Rezervacija> lista = new ArrayList<>();
+    List<Rezervacija> lista,lista_lokalna;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReference1;
@@ -58,6 +58,9 @@ public class AktivneRezervacije extends Fragment {
     Termin t;
     Date currentTime;
     boolean upisan = false;
+    ReservationDatabaseHandler rdh;
+    TerminiDatabaseHandler tdh;
+    Button otkazi;
 
 
     @Nullable
@@ -67,19 +70,44 @@ public class AktivneRezervacije extends Fragment {
 
 
         lista = new ArrayList<>();
+        lista_lokalna = new ArrayList<>();
         databaseHandler = new DatabaseHandler(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Rezervacije");
-
+        rdh = new ReservationDatabaseHandler(getContext());
+        tdh = new TerminiDatabaseHandler(getContext());
+        lv = (ListView)view.findViewById(R.id.listViewAktivne);
         if(checkNet()){
-            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+
 
         }else{
-            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"NEMA NETA aktivne",Toast.LENGTH_SHORT).show();
+            lista_lokalna = rdh.getAllRezervacija();
+            currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
+            String dateString = format.format( currentTime );
+            for (Rezervacija r :lista_lokalna) {
+                Date datumTermina=null;
+                try {
+                    Termin t = tdh.findTerminById(r.getT().getId());
+                    datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(t.getDatum()+" "+t.getVreme());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                if(datumTermina.compareTo(currentTime)>0) {
+
+                    lista.add(r);
+                }
+            }
+            CustomAdapter customAdapter = new CustomAdapter();
+            lv.setAdapter(customAdapter);
+
         }
 
 
-        lv = (ListView)view.findViewById(R.id.listViewAktivne);
+
        User u = databaseHandler.findUser();
         Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
@@ -174,7 +202,11 @@ public class AktivneRezervacije extends Fragment {
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView sati=(TextView)convertView.findViewById(R.id.sati);
-            Button otkazi = (Button)convertView.findViewById(R.id.otkazi);
+            otkazi = (Button)convertView.findViewById(R.id.otkazi);
+            if(checkNet())
+                otkazi.setVisibility(View.VISIBLE);
+            else
+                otkazi.setVisibility(View.INVISIBLE);
 
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());

@@ -3,24 +3,22 @@ package com.example.marija;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,7 +33,6 @@ import android.widget.Toast;
 
 import com.example.marija.Models.Termin;
 import com.example.marija.Models.User;
-import com.example.marija.Models.Usluga;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -227,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     public void addTerminiToFirebase(){
         //ovde treba provera ako se nalazi termiin u rezervacijama da se ne ubaci
-        Termin t = new Termin(0,"30.06.2019.","12:00",true,0);
+        Termin t = new Termin(0,"30.06.2019.","12:00",true,1);
         Termin t1 = new Termin(1,"30.06.2019.","13:00",true,0);
         Termin t2 = new Termin(2,"30.06.2019.","14:00",true,0);
         Termin t3 = new Termin(3,"30.04.2019.","16:48",true,0);

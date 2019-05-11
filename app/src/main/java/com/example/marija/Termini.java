@@ -42,7 +42,7 @@ public class Termini extends Fragment {
     User ulogovani;
     Usluga u;
     int id_usluge;
-    List<Termin> listaTermina;
+    List<Termin> listaTermina,listaTermina_lokalna;
     List<Rezervacija> listaRez;
     ListView lv;
     Termin t = new Termin();
@@ -53,6 +53,8 @@ public class Termini extends Fragment {
     private  RezervacijaZaTermin rzt;
     Pomocna p;
     int brojac=0;
+    TerminiDatabaseHandler tdh;
+    Button zakazi;
 
     @Nullable
     @Override
@@ -66,14 +68,23 @@ public class Termini extends Fragment {
         rzt = new RezervacijaZaTermin(getContext());
         ulogovani = databaseHandler.findUser();
         listaTermina = new ArrayList<Termin>();
+        listaTermina_lokalna = new ArrayList<Termin>();
         listaRez = new ArrayList<Rezervacija>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Termini");
+        tdh = new TerminiDatabaseHandler(getContext());
         if(checkNet()){
-            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
-            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"Proverite konekciju s internetom!",Toast.LENGTH_SHORT).show();
+            listaTermina_lokalna = tdh.getAllTermini();
+            for (Termin t: listaTermina_lokalna) {
+                if(t.getIdUsluge() == id_usluge)
+                    listaTermina.add(t);
+            }
+            CustomAdapter customAdapter = new CustomAdapter();
+            lv.setAdapter(customAdapter);
         }
 
         Query q =  FirebaseDatabase.getInstance().getReference("Usluge")
@@ -144,9 +155,11 @@ public class Termini extends Fragment {
 
             TextView naslov = (TextView) convertView.findViewById(R.id.naslov);
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
-            Button zakazi = (Button)convertView.findViewById(R.id.zakazi);
-
-
+            zakazi = (Button)convertView.findViewById(R.id.zakazi);
+            if(checkNet())
+            zakazi.setVisibility(View.VISIBLE);
+            else
+                zakazi.setVisibility(View.INVISIBLE);
             zakazi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

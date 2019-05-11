@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.marija.Models.Recenzija;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +36,7 @@ public class Recenzije extends Fragment {
     String[] datumi ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
     String[] korisnici={"Pera Peric","Mika Mikic","Ana Anic"};*/
    //int [] slike = {R.drawable.user1,R.drawable.user2,R.drawable.user3};
-   private List<Recenzija> lista;
+   private List<Recenzija> lista,lista_lokalna;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -49,6 +48,7 @@ public class Recenzije extends Fragment {
     ListView lv;
     StorageReference storageReference;
     StorageReference storageReference1;
+    RecenzijeDatabaseHandler rdh;
 
     @Nullable
     @Override
@@ -56,7 +56,8 @@ public class Recenzije extends Fragment {
         View view = inflater.inflate(R.layout.recenzije,container,false);
          lv = (ListView)view.findViewById(R.id.listViewRecenzije);
         lista = new ArrayList<>();
-
+        lista_lokalna = new ArrayList<>();
+        rdh = new RecenzijeDatabaseHandler(getContext());
         id_usluge_kliknute = getArguments().getInt("ID_usluge");
 
         storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
@@ -66,10 +67,16 @@ public class Recenzije extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Recenzije");
         if(checkNet()){
-            Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
-            Toast.makeText(getContext(),"NEMA NETA",Toast.LENGTH_SHORT).show();
+            lista_lokalna = rdh.getAllRecenzija();
+            for (Recenzija r: lista_lokalna) {
+                if(r.getIdUsluge() == idUsluge)
+                    lista.add(r);
+            }
+            CustomAdapter customAdapter = new CustomAdapter();
+            lv.setAdapter(customAdapter);
         }
 
 
