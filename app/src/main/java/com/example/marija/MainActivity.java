@@ -3,6 +3,7 @@ package com.example.marija;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -80,11 +81,15 @@ public class MainActivity extends AppCompatActivity implements
     StorageReference storageReference;
     StorageReference storageReference1;
     TerminiDatabaseHandler tdh = new TerminiDatabaseHandler(this);
-    BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver MyReceiver = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MyReceiver =new MyReceiver();
+        broadcastIntent();
+
         list = new ArrayList<Usluga>();
         listener = new Listener();
         storageReference = FirebaseStorage.getInstance().getReference("Korisnici");
@@ -356,6 +361,16 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void broadcastIntent(){
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(MyReceiver);
     }
 
 

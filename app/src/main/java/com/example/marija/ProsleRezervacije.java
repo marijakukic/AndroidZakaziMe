@@ -68,8 +68,6 @@ public class ProsleRezervacije extends Fragment {
         datum = datumivreme[0];
         vreme = datumivreme[1];
 
-
-
         try {
             datumDate = new SimpleDateFormat("dd.MM.yyyy.").parse(datum);
         } catch (ParseException e) {
@@ -214,14 +212,5 @@ public class ProsleRezervacije extends Fragment {
     }
 
 
-    @Override
-    public void onStart(){
-        super.onStart();
-    try {
-        if (checkNet())
-            oceni.setVisibility(View.VISIBLE);
-        else
-            oceni.setVisibility(View.INVISIBLE);
-    }catch(Exception e){}
-    }
+
 }

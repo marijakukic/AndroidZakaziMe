@@ -281,10 +281,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "My Location");
+                            try {
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM,
+                                        "My Location");
+                            }catch(Exception e){
+                                Toast.makeText(MapActivity.this, "Ukljucite lokaciju", Toast.LENGTH_SHORT).show();
+                            }
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
