@@ -70,17 +70,20 @@ public class Recenzije extends Fragment {
         if(checkNet()){
            // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
+        } if(checkNet()){
+            // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
+
         }else{
-
+            Toast.makeText(getContext(),"Proverite konekciju s internetom!",Toast.LENGTH_SHORT).show();
             lista_lokalna = rdh.getAllRecenzija();
-
-            for (Recenzija r: lista_lokalna) {
-                if(r.getIdUsluge() == idUsluge)//ucita kao duplo nadji bag
-                    lista.add(r);
-                Toast.makeText(getContext(),"USO SAM",Toast.LENGTH_SHORT).show();
-            }
-            CustomAdapter customAdapter = new CustomAdapter();
-            lv.setAdapter(customAdapter);
+            try {
+                for (Recenzija t : lista_lokalna) {
+                    if (t.getIdUsluge() == id_usluge_kliknute)
+                        lista_lokalna.add(t);
+                }
+                CustomAdapter customAdapter = new CustomAdapter();
+                lv.setAdapter(customAdapter);
+            }catch(Exception e){}
         }
 
 
