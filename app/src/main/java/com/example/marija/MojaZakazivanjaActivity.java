@@ -1,8 +1,11 @@
 package com.example.marija;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
+import android.net.ConnectivityManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,7 +48,7 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
     String[] termini ={"13.04.2019. 12:00","14.04.2019. 13:00","15.04.2019. 15:00"};
     private SectionPageAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
-
+    private BroadcastReceiver MyReceiver = null;
 
 
 
@@ -61,6 +64,9 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        MyReceiver = new MyReceiver();
+        broadcastIntent();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -146,6 +152,18 @@ public class MojaZakazivanjaActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    public void broadcastIntent(){
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(MyReceiver);
+        }catch(Exception e){}
     }
 
 

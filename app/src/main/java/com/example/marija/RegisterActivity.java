@@ -1,7 +1,9 @@
 package com.example.marija;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -58,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RezervacijeDatabaseHandler rezDataBaseHelper = new RezervacijeDatabaseHandler(this);
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private BroadcastReceiver MyReceiver = null;
     String entryname ;
     String entrykorname ;
     String entryMail ;
@@ -76,6 +79,9 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         setupActionBar();
         btnAdd = findViewById(R.id.registrujSeBtn);
+
+        MyReceiver = new MyReceiver();
+        broadcastIntent();
         if(checkNet()){
             //Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
             btnAdd.setVisibility(View.VISIBLE);
@@ -457,6 +463,17 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return have_mobile || have_WIFI;
+    }
+
+    public void broadcastIntent(){
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(MyReceiver);
+        }catch(Exception e){}
     }
 
 

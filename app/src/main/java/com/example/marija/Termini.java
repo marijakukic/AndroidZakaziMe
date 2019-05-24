@@ -1,5 +1,7 @@
 package com.example.marija;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -56,6 +58,9 @@ public class Termini extends Fragment {
     TerminiDatabaseHandler tdh;
     Button zakazi;
 
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +78,10 @@ public class Termini extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Termini");
         tdh = new TerminiDatabaseHandler(getContext());
+
+
+
+
         if(checkNet()){
            // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
@@ -131,6 +140,8 @@ public class Termini extends Fragment {
 
         return view;
     }
+
+
 
      class CustomAdapter extends BaseAdapter {
 

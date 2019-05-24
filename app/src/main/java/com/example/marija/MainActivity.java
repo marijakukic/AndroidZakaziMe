@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MyReceiver =new MyReceiver();
+        MyReceiver = new MyReceiver();
         broadcastIntent();
 
         list = new ArrayList<Usluga>();
@@ -370,7 +370,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(MyReceiver);
+        try {
+            unregisterReceiver(MyReceiver);
+        }catch(Exception e){}
     }
 
 
@@ -571,7 +573,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
 
-       rdh.deleteAll();
+        rdh.deleteAll();
         Query q1 = FirebaseDatabase.getInstance().getReference("Recenzije");
         q1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

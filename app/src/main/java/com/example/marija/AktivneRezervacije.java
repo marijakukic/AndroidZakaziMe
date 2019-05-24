@@ -1,7 +1,9 @@
 package com.example.marija;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -61,6 +63,7 @@ public class AktivneRezervacije extends Fragment {
     ReservationDatabaseHandler rdh;
     TerminiDatabaseHandler tdh;
     Button otkazi;
+
 
 
     @Nullable
@@ -306,6 +309,7 @@ public class AktivneRezervacije extends Fragment {
 
         return have_mobile || have_WIFI;
     }
+
 
 
 

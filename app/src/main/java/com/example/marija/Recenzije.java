@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.marija.Models.Recenzija;
 import com.google.firebase.database.DataSnapshot;
@@ -70,10 +71,13 @@ public class Recenzije extends Fragment {
            // Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
+
             lista_lokalna = rdh.getAllRecenzija();
+
             for (Recenzija r: lista_lokalna) {
-                if(r.getIdUsluge() == idUsluge)
+                if(r.getIdUsluge() == idUsluge)//ucita kao duplo nadji bag
                     lista.add(r);
+                Toast.makeText(getContext(),"USO SAM",Toast.LENGTH_SHORT).show();
             }
             CustomAdapter customAdapter = new CustomAdapter();
             lv.setAdapter(customAdapter);

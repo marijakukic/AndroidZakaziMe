@@ -1,6 +1,8 @@
 package com.example.marija;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,10 +31,14 @@ public class ListItemActivity extends AppCompatActivity {
     private UslugaDatabaseHandler uslugaDatabaseHandler = new UslugaDatabaseHandler(this);
     ImageView slika;
     Usluga selektovana_usluga;
+    private BroadcastReceiver MyReceiver = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
+
+        MyReceiver = new MyReceiver();
+        broadcastIntent();
 
         sectionsPagerAdapter= new SectionPageAdapter(getSupportFragmentManager());
         viewPager=(ViewPager)findViewById(R.id.container);
@@ -121,6 +127,17 @@ public class ListItemActivity extends AppCompatActivity {
         adapter.addFragment(termini,"Termini");
         adapter.addFragment(recenzije,"Recenzije");
         viewPager.setAdapter(adapter);
+    }
+
+    public void broadcastIntent(){
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(MyReceiver);
+        }catch(Exception e){}
     }
 
 
