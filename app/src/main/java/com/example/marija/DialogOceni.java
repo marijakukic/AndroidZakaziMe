@@ -81,9 +81,8 @@ public class DialogOceni extends AppCompatDialogFragment {
 
                             Rezervacija r = ds.getValue(Rezervacija.class);
                             idUsluge = r.getU().getID();
-                            Toast.makeText(getContext(),Integer.toString(idUsluge),Toast.LENGTH_SHORT).show();
                             currentDate = Calendar.getInstance().getTime();
-                            SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
+                            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
                             String dateString = format.format( currentDate );
                             Recenzija recenzija = new Recenzija(rating,komentar,korisnik,idUsluge,dateString);
                             FirebaseDatabase.getInstance().getReference("Recenzije").push().setValue(recenzija);
