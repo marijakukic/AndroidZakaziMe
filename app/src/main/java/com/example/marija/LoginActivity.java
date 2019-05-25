@@ -199,8 +199,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Toast.makeText(LoginActivity.this, u.getEmail(), Toast.LENGTH_SHORT).show();
 
                             mDataBaseHelper.addUser(u.getName(), u.getKoriscnickoIme(), u.getEmail(), u.getPass(), u.getPrezime());
-                            FirebaseDatabase.getInstance().getReference("Termini").removeValue();
-                            addTerminiToFirebase();
+                          // FirebaseDatabase.getInstance().getReference("Termini").removeValue();
+                           // addTerminiToFirebase();
                     }
 
 
@@ -223,17 +223,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     public void addTerminiToFirebase(){
-        //ovde treba provera ako se nalazi termiin u rezervacijama da se ne ubaci
-        Termin t = new Termin(0,"30.06.2019.","18:00",true,1);
-        Termin t1 = new Termin(1,"30.06.2019.","13:00",true,0);
-        Termin t2 = new Termin(2,"30.06.2019.","14:00",true,0);
-        //Termin t3 = new Termin(3,"30.04.2019.","16:48",true,0);
-        //Termin t4 = new Termin(4,"30.04.2019.","16:49",true,0);
+        Termin t = new Termin(1,"25.05.2019.","21:10",true,1);
+        Termin t1 = new Termin(2,"30.06.2019.","13:00",true,0);
+        Termin t2 = new Termin(20,"30.06.2019.","14:00",true,1);
+        Termin t3 = new Termin(30,"30.06.2019.","16:48",true,0);
+        Termin t4 = new Termin(40,"30.06.2019.","16:49",true,1);
         FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
         FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t1);
         FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t2);
-       // FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t3);
-       // FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t4);
+        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t3);
+        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t4);
 
 
 

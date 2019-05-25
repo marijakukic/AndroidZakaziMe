@@ -474,13 +474,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 calendar.set(Calendar.MINUTE, min);
                                 calendar.set(Calendar.HOUR, sati);
                             }else if(selektovano.equals("15 minutes")){
-                                calendar.set(Calendar.SECOND, 0);
-                                calendar.set(Calendar.MINUTE, min-15);
-                                calendar.set(Calendar.HOUR, sati);
+                                if(min<15){
+                                    calendar.set(Calendar.SECOND, 0);
+                                    calendar.set(Calendar.MINUTE, 60-15+min);
+                                    calendar.set(Calendar.HOUR, sati-1);
+                                }else {
+                                    calendar.set(Calendar.SECOND, 0);
+                                    calendar.set(Calendar.MINUTE, min - 15);
+                                    calendar.set(Calendar.HOUR, sati);
+                                }
                             }else if(selektovano.equals("30 minutes")){
-                                calendar.set(Calendar.SECOND, 0);
-                                calendar.set(Calendar.MINUTE, min-30);
-                                calendar.set(Calendar.HOUR, sati);
+                                if(min<30){
+                                    calendar.set(Calendar.SECOND, 0);
+                                    calendar.set(Calendar.MINUTE, 60-30+min);
+                                    calendar.set(Calendar.HOUR, sati-1);
+                                }else {
+                                    calendar.set(Calendar.SECOND, 0);
+                                    calendar.set(Calendar.MINUTE, min - 30);
+                                    calendar.set(Calendar.HOUR, sati);
+                                }
                             }else if(selektovano.equals("1 hour")){
                                 calendar.set(Calendar.SECOND, 0);
                                 calendar.set(Calendar.MINUTE, min);

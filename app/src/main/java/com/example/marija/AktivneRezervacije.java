@@ -210,6 +210,30 @@ public class AktivneRezervacije extends Fragment {
                 otkazi.setVisibility(View.VISIBLE);
             else
                 otkazi.setVisibility(View.INVISIBLE);
+//            Date datumTermina=null;
+//           // Date currTime2 = null;
+//            try {
+//                datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(lista.get(position).getT().getDatum() + " " + lista.get(position).getT().getVreme());
+//               // currTime2 = new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(currentTime.toString());
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            Termin t = lista.get(position).getT();
+//            String[] splitovanje = t.getVreme().split(":");
+//
+//            int satii = Integer.parseInt(splitovanje[0]);
+//            int min = Integer.parseInt(splitovanje[1]);
+//
+//            String[] datumSplit = t.getDatum().split("\\.");
+//
+//            int dan = Integer.parseInt(datumSplit[0]);
+//            int mesec= Integer.parseInt(datumSplit[1]);
+//            int godina=Integer.parseInt(datumSplit[2]);
+//            if() {
+//                otkazi.setVisibility(View.INVISIBLE);
+//            }
+//            else
+//                otkazi.setVisibility(View.VISIBLE);
 
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());

@@ -138,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Query query = FirebaseDatabase.getInstance().getReference("Korisnici")
                             .orderByChild("email").equalTo(entryMail);
 
-                    query.addValueEventListener(new ValueEventListener() {
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         if( dataSnapshot.getChildrenCount() == 0) {
