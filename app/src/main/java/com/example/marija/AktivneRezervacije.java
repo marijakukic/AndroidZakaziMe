@@ -210,30 +210,64 @@ public class AktivneRezervacije extends Fragment {
                 otkazi.setVisibility(View.VISIBLE);
             else
                 otkazi.setVisibility(View.INVISIBLE);
-//            Date datumTermina=null;
-//           // Date currTime2 = null;
-//            try {
-//                datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(lista.get(position).getT().getDatum() + " " + lista.get(position).getT().getVreme());
-//               // currTime2 = new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(currentTime.toString());
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            Termin t = lista.get(position).getT();
-//            String[] splitovanje = t.getVreme().split(":");
-//
-//            int satii = Integer.parseInt(splitovanje[0]);
-//            int min = Integer.parseInt(splitovanje[1]);
-//
-//            String[] datumSplit = t.getDatum().split("\\.");
-//
-//            int dan = Integer.parseInt(datumSplit[0]);
-//            int mesec= Integer.parseInt(datumSplit[1]);
-//            int godina=Integer.parseInt(datumSplit[2]);
-//            if() {
-//                otkazi.setVisibility(View.INVISIBLE);
-//            }
-//            else
-//                otkazi.setVisibility(View.VISIBLE);
+
+
+            String currDate = null;
+            String currTime = null;
+            ;
+
+            SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy.");
+            currDate = format1.format(currentTime);
+            SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
+            currTime = format2.format(currentTime);
+            Termin tt = lista.get(position).getT();
+           String[] splitovanje = tt.getVreme().split(":");
+
+            int satii = Integer.parseInt(splitovanje[0]);
+            int min = Integer.parseInt(splitovanje[1]);
+
+            String[] datumSplit = tt.getDatum().split("\\.");
+            int dan = Integer.parseInt(datumSplit[0]);
+           int mesec= Integer.parseInt(datumSplit[1]);
+           int god = Integer.parseInt(datumSplit[2]);
+
+          Termin tcurr = new Termin();
+           tcurr.setVreme(currTime);
+           tcurr.setDatum(currDate);
+            String[] splitovanje2 = tcurr.getVreme().split(":");
+
+            int satii2 = Integer.parseInt(splitovanje2[0]);
+            int min2 = Integer.parseInt(splitovanje2[1]);
+
+            String[] datumSplit2 = tcurr.getDatum().split("\\.");
+            int dan2 = Integer.parseInt(datumSplit2[0]);
+            int mesec2= Integer.parseInt(datumSplit2[1]);
+            int god2 = Integer.parseInt(datumSplit2[2]);
+
+
+            if(dan==dan2 && mesec==mesec2 && god==god2){
+              if(min<30){
+                  if((satii-satii2==1 && 60 -min2 + min<30 )){
+                      otkazi.setVisibility(View.INVISIBLE);
+                  }
+              }
+              else {
+                  if ((satii == satii2 && min - min2 < 30)) {
+                      otkazi.setVisibility(View.INVISIBLE);
+                  } else {
+                      otkazi.setVisibility(View.VISIBLE);
+                  }
+              }
+            }else{
+
+                otkazi.setVisibility(View.VISIBLE);
+            }
+
+
+
+
+
+
 
             naslov.setText(lista.get(position).getU().getNaziv());
             termin.setText(lista.get(position).getT().getDatum());
