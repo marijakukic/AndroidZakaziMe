@@ -28,6 +28,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.marija.Models.Kategorija;
 import com.example.marija.Models.Lokacija;
 import com.example.marija.Models.Recenzija;
@@ -477,9 +480,11 @@ public class MainActivity extends AppCompatActivity implements
 
     class CustomAdapter extends BaseAdapter{
 
+
         public CustomAdapter(ArrayList<Usluga> x) {
             konacnaListaUsluga = x;
         }
+
         public CustomAdapter() {
         }
 
@@ -514,24 +519,22 @@ public class MainActivity extends AppCompatActivity implements
             User u = mDataBaseHelper.findUser();
             TextView navigation = (TextView)findViewById(R.id.korisnikNavigation1);
             TextView navigation1 = (TextView)findViewById(R.id.korImeNav1);
-            ImageView slikaUsera= (ImageView)findViewById(R.id.slikaUsera1);
+            ImageView nova = (ImageView)findViewById(R.id.slikaUsera1);
             navigation.setText(u.getEmail());
             navigation1.setText(u.getKoriscnickoIme());
-            storageReference1 = storageReference.child(u.getEmail()+".jpg");
 
             GlideApp.with(MainActivity.this)
-                    .load(storageReference1)
+                    .load(storageReference.child(u.getEmail()+".jpg"))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .centerCrop()
-                    .into(slikaUsera);
-
+                    .into(nova);
 
             return convertView;
         }
         public ArrayList<Usluga> listaAdaptera() {
             return konacnaListaUsluga;
         }
-
-
 
         private void updateList(ArrayList<Usluga> novalista){
 

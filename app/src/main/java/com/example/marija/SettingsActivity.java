@@ -186,6 +186,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
              etp2=(EditTextPreference)findPreference("example2");
              etp = (EditTextPreference)findPreference("example1");
+
+            Preference button = findPreference(getString(R.string.izaberiSliku));
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    Intent intent = new Intent(getActivity(), ChangeProfileImageActivity.class);
+                    startActivity(intent);
+
+                    return true;
+                }
+            });
+
+
            try{
 
                 etp.setText(u.getKoriscnickoIme());

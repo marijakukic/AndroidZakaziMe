@@ -23,8 +23,9 @@
 
     </EditTextPreference>
 
-
-
+    <Preference android:title="Izmeni profilnu sliku"
+        android:key="@string/izaberiSliku"
+        android:icon="@drawable/ic_menu_gallery"/>
 
 
     <!--<SwitchPreference

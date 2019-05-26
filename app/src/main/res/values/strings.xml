@@ -136,4 +136,8 @@
     <string name="radno_vreme"><b><i>Ponedeljak - Petak: </i></b> 09:00 - 18:00 </string>
     <string name="radno_vremeSubota"><b><i>Subota: </i></b> 09:00 - 15:00 </string>
     <string name="radno_vremeNedelja"><b><i>Nedelja: </i></b> Neradna </string>
+    <string name="izaberiSliku">izmeniSliku</string>
+    <string name="title_activity_change_profile_image">ChangeProfileImageActivity</string>
+    <string name="promeni_sliku">Izmeni profilnu sliku</string>
+    <string name="promeni_sliku_summary">Izmeni profilnu sliku</string>
 </resources>
