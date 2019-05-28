@@ -50,7 +50,7 @@ public class ListItemActivity extends AppCompatActivity {
            // Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
-            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
         }
 
 

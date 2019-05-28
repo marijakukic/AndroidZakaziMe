@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
             //Toast.makeText(this,"IMA NETA",Toast.LENGTH_SHORT).show();
 
         }else{
-            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
         }
         punjenjeLokalneBaze();
         // PROVERITI KAKO SE SLIKE CUVAJU U BAZI, NE SME DIREKT IZ APLIKACIJE!
@@ -538,8 +538,8 @@ public class MainActivity extends AppCompatActivity implements
 
         private void updateList(ArrayList<Usluga> novalista){
 
-            Toast.makeText(MainActivity.this,Integer.toString(novalista.size()),Toast.LENGTH_LONG).show();
-            Toast.makeText(MainActivity.this,Integer.toString(konacnaListaUsluga.size()),Toast.LENGTH_LONG).show();
+          //  Toast.makeText(MainActivity.this,Integer.toString(novalista.size()),Toast.LENGTH_LONG).show();
+          //  Toast.makeText(MainActivity.this,Integer.toString(konacnaListaUsluga.size()),Toast.LENGTH_LONG).show();
             konacnaListaUsluga.clear();
             konacnaListaUsluga.addAll(list);
             //this.notifyDataSetChanged();

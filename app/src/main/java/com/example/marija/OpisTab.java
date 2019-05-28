@@ -110,7 +110,7 @@ public class OpisTab extends Fragment {
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
-            Toast.makeText(getActivity(), "You can't make map requests", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

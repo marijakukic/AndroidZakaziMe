@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
             btnAdd.setVisibility(View.VISIBLE);
 
         }else{
-            Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"NEMA NETA",Toast.LENGTH_SHORT).show();
             btnAdd.setVisibility(View.INVISIBLE);
         }
         mEmailView = findViewById(R.id.emailRegister);

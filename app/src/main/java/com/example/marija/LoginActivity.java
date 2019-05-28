@@ -196,7 +196,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }else{
                     for(DataSnapshot ds : dataSnapshot.getChildren()) {
                         User u = ds.getValue(User.class);
-                        Toast.makeText(LoginActivity.this, u.getEmail(), Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(LoginActivity.this, u.getEmail(), Toast.LENGTH_SHORT).show();
 
                             mDataBaseHelper.addUser(u.getName(), u.getKoriscnickoIme(), u.getEmail(), u.getPass(), u.getPrezime());
                           // FirebaseDatabase.getInstance().getReference("Termini").removeValue();

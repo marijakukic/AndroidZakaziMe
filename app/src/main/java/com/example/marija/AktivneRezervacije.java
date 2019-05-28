@@ -113,7 +113,7 @@ public class AktivneRezervacije extends Fragment {
 
 
        User u = databaseHandler.findUser();
-        Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),u.getEmail(),Toast.LENGTH_SHORT).show();
         currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
         String dateString = format.format( currentTime );

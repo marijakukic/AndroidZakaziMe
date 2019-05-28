@@ -71,7 +71,7 @@ public class DialogOceni extends AppCompatDialogFragment {
                  komentar = komentarView.getText().toString();
                  korisnik = ulogovaniKorisnik.getEmail();
                 idRez  = rezervacijeDatabaseHandler.findRez();
-                Toast.makeText(getContext(),"REZERVACIJA"+Integer.toString(idRez),Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(getContext(),"REZERVACIJA"+Integer.toString(idRez),Toast.LENGTH_SHORT).show();
                 Query query = FirebaseDatabase.getInstance().getReference("Rezervacije")
                         .orderByChild("id").equalTo(idRez);
                 query.addValueEventListener(new ValueEventListener() {
