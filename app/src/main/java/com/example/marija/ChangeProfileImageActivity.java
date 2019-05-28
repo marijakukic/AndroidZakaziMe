@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -49,6 +50,7 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_profile_image);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setupActionBar();
         mStorageRef = FirebaseStorage.getInstance().getReference("Korisnici");
         mFirebaseStorage = FirebaseStorage.getInstance().getReference("Korisnici").getStorage();
 
@@ -65,6 +67,9 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
 
         databaseHandler = new DatabaseHandler(ChangeProfileImageActivity.this);
         u = databaseHandler.findUser();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +114,20 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
 
 
     }
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 
     public String getURLForResource (int resourceId) {
         return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();

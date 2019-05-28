@@ -43,8 +43,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.DoubleToIntFunction;
 
 //import com.google.android.gms.location.places.Places;
 
@@ -57,6 +59,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private GoogleMap mMap;
     int id_usluge;
+    Location currentLocation1;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -69,6 +72,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (id_usluge == 0) {
                 moveCamera(new LatLng(45.252316, 19.804043), DEFAULT_ZOOM,
                         "Belle Femme");
+
             } else if (id_usluge == 1) {
                 moveCamera(new LatLng(45.246394, 19.834467), DEFAULT_ZOOM,
                         "Words and Friends");
@@ -130,6 +134,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         id_usluge = getIntent().getExtras().getInt("id_usluge");
 
         getLocationPermission();
+        getDeviceCoordinates();
 
 
 
@@ -145,6 +150,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
+        getDeviceCoordinates();
        // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
 
@@ -175,6 +181,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
+                getDeviceCoordinates();
             }
         });
 
@@ -195,16 +202,74 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (id_usluge == 0) {
                     moveCamera(new LatLng(45.252316, 19.804043), DEFAULT_ZOOM,
                             "Belle Femme");
+
+                    Location startPoint=new Location("locationA");
+                    startPoint.setLatitude(45.252316);
+                    startPoint.setLongitude(19.804043);
+
+                    Location endPoint=new Location("locationA");
+                    getDeviceCoordinates();
+                    endPoint.setLatitude(currentLocation1.getLatitude());
+                    endPoint.setLongitude(currentLocation1.getLongitude());
+
+                    double distance=startPoint.distanceTo(endPoint);
+
+                    String nova = new DecimalFormat("#.##").format(distance/1000);
+
+                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
                 } else if (id_usluge == 1) {
                     moveCamera(new LatLng(45.246394, 19.834467), DEFAULT_ZOOM,
                             "Words and Friends");
+                    Location startPoint=new Location("locationA");
+                    startPoint.setLatitude(45.246394);
+                    startPoint.setLongitude(19.834467);
+
+                    Location endPoint=new Location("locationA");
+                    getDeviceCoordinates();
+                    endPoint.setLatitude(currentLocation1.getLatitude());
+                    endPoint.setLongitude(currentLocation1.getLongitude());
+
+                    double distance=startPoint.distanceTo(endPoint);
+
+                    String nova = new DecimalFormat("#.##").format(distance/1000);
+
+                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
                 } else if (id_usluge == 2) {
                     moveCamera(new LatLng(44.805339, 20.473941), DEFAULT_ZOOM,
                             "Privatni casovi matematike");
+                    Location startPoint=new Location("locationA");
+                    startPoint.setLatitude(44.805339);
+                    startPoint.setLongitude(20.473941);
+
+                    Location endPoint=new Location("locationA");
+                    getDeviceCoordinates();
+                    endPoint.setLatitude(currentLocation1.getLatitude());
+                    endPoint.setLongitude(currentLocation1.getLongitude());
+
+                    double distance=startPoint.distanceTo(endPoint);
+
+                    String nova = new DecimalFormat("#.##").format(distance/1000);
+
+                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
                 }
                 else if (id_usluge == 3) {
                     moveCamera(new LatLng(45.240344, 19.832929), DEFAULT_ZOOM,
                             "Zubarska ordinacija dr. Bosnjak");
+                    Location startPoint=new Location("locationA");
+                    startPoint.setLatitude(45.240344);
+                    startPoint.setLongitude(19.832929);
+
+                    Location endPoint=new Location("locationA");
+                    getDeviceCoordinates();
+                    endPoint.setLatitude(currentLocation1.getLatitude());
+                    endPoint.setLongitude(currentLocation1.getLongitude());
+
+                    double distance=startPoint.distanceTo(endPoint);
+
+                    String nova = new DecimalFormat("#.##").format(distance/1000);
+
+                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+
                 }
 
 
@@ -292,6 +357,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }catch (SecurityException e){
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        }
+    }
+
+    private void getDeviceCoordinates(){
+        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(mLocationPermissionsGranted){
+
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location!");
+                            currentLocation1 = (Location) task.getResult();
+
+
+                        }else{
+                            Log.d(TAG, "onComplete: current location is null");
+                           // Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                             mDataBaseHelper.addUser(u.getName(), u.getKoriscnickoIme(), u.getEmail(), u.getPass(), u.getPrezime());
                           // FirebaseDatabase.getInstance().getReference("Termini").removeValue();
-                            addTerminiToFirebase();
+                          //  addTerminiToFirebase();
                     }
 
 

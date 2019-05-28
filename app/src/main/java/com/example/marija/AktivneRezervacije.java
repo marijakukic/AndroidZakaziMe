@@ -95,14 +95,15 @@ public class AktivneRezervacije extends Fragment {
                 try {
                     Termin t = tdh.findTerminById(r.getT().getId());
                     datumTermina= new SimpleDateFormat("dd.MM.yyyy. HH:mm").parse(t.getDatum()+" "+t.getVreme());
+                    if(datumTermina.compareTo(currentTime)>0) {
+
+                        lista.add(r);
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                if(datumTermina.compareTo(currentTime)>0) {
 
-                    lista.add(r);
-                }
             }
             CustomAdapter customAdapter = new CustomAdapter();
             lv.setAdapter(customAdapter);
@@ -206,11 +207,6 @@ public class AktivneRezervacije extends Fragment {
             TextView termin = (TextView) convertView.findViewById(R.id.termin);
             TextView sati=(TextView)convertView.findViewById(R.id.sati);
             otkazi = (Button)convertView.findViewById(R.id.otkazi);
-            if(checkNet())
-                otkazi.setVisibility(View.VISIBLE);
-            else
-                otkazi.setVisibility(View.INVISIBLE);
-
 
             String currDate = null;
             String currTime = null;
@@ -221,19 +217,19 @@ public class AktivneRezervacije extends Fragment {
             SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
             currTime = format2.format(currentTime);
             Termin tt = lista.get(position).getT();
-           String[] splitovanje = tt.getVreme().split(":");
+            String[] splitovanje = tt.getVreme().split(":");
 
             int satii = Integer.parseInt(splitovanje[0]);
             int min = Integer.parseInt(splitovanje[1]);
 
             String[] datumSplit = tt.getDatum().split("\\.");
             int dan = Integer.parseInt(datumSplit[0]);
-           int mesec= Integer.parseInt(datumSplit[1]);
-           int god = Integer.parseInt(datumSplit[2]);
+            int mesec= Integer.parseInt(datumSplit[1]);
+            int god = Integer.parseInt(datumSplit[2]);
 
-          Termin tcurr = new Termin();
-           tcurr.setVreme(currTime);
-           tcurr.setDatum(currDate);
+            Termin tcurr = new Termin();
+            tcurr.setVreme(currTime);
+            tcurr.setDatum(currDate);
             String[] splitovanje2 = tcurr.getVreme().split(":");
 
             int satii2 = Integer.parseInt(splitovanje2[0]);
@@ -246,27 +242,27 @@ public class AktivneRezervacije extends Fragment {
 
 
             if(dan==dan2 && mesec==mesec2 && god==god2){
-              if(min<30){
-                  if((satii-satii2==1 && 60 -min2 + min<30 )){
-                      otkazi.setVisibility(View.INVISIBLE);
-                  }
-              }
-              else {
-                  if ((satii == satii2 && min - min2 < 30)) {
-                      otkazi.setVisibility(View.INVISIBLE);
-                  } else {
-                      otkazi.setVisibility(View.VISIBLE);
-                  }
-              }
+                if(min<30){
+                    if((satii-satii2==1 && 60 -min2 + min<30 )){
+                        otkazi.setVisibility(View.INVISIBLE);
+                    }
+                }
+                else {
+                    if ((satii == satii2 && min - min2 < 30)) {
+                        otkazi.setVisibility(View.INVISIBLE);
+                    } else {
+                        otkazi.setVisibility(View.VISIBLE);
+                    }
+                }
             }else{
 
                 otkazi.setVisibility(View.VISIBLE);
             }
 
-
-
-
-
+            if(checkNet())
+                otkazi.setVisibility(View.VISIBLE);
+            else
+                otkazi.setVisibility(View.INVISIBLE);
 
 
             naslov.setText(lista.get(position).getU().getNaziv());
