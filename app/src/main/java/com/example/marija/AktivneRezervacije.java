@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,14 +82,11 @@ public class AktivneRezervacije extends Fragment {
         rdh = new ReservationDatabaseHandler(getContext());
         tdh = new TerminiDatabaseHandler(getContext());
         lv = (ListView)view.findViewById(R.id.listViewAktivne);
-        if(checkNet()){
-            //Toast.makeText(getContext(),"IMA NETA",Toast.LENGTH_SHORT).show();
-
-
-        }else{
+        currentTime = Calendar.getInstance().getTime();
+       if(!checkNet()){
             //Toast.makeText(getContext(),"NEMA NETA aktivne",Toast.LENGTH_SHORT).show();
             lista_lokalna = rdh.getAllRezervacija();
-            currentTime = Calendar.getInstance().getTime();
+
             SimpleDateFormat format = new SimpleDateFormat("dd.mm.yyyy. HH:mm");
             String dateString = format.format( currentTime );
             for (Rezervacija r :lista_lokalna) {
@@ -210,8 +209,7 @@ public class AktivneRezervacije extends Fragment {
 
             String currDate = null;
             String currTime = null;
-            ;
-
+            currentTime = Calendar.getInstance().getTime();
             SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy.");
             currDate = format1.format(currentTime);
             SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
@@ -250,19 +248,15 @@ public class AktivneRezervacije extends Fragment {
                 else {
                     if ((satii == satii2 && min - min2 < 30)) {
                         otkazi.setVisibility(View.INVISIBLE);
-                    } else {
+                    } else if (checkNet()){
                         otkazi.setVisibility(View.VISIBLE);
                     }
                 }
-            }else{
+            }else if (!checkNet()){
+                otkazi.setVisibility(View.INVISIBLE);
 
-                otkazi.setVisibility(View.VISIBLE);
             }
 
-            if(checkNet())
-                otkazi.setVisibility(View.VISIBLE);
-            else
-                otkazi.setVisibility(View.INVISIBLE);
 
 
             naslov.setText(lista.get(position).getU().getNaziv());
