@@ -180,8 +180,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
-                getDeviceLocation();
-                getDeviceCoordinates();
+                    getDeviceLocation();
+                    getDeviceCoordinates();
             }
         });
 
@@ -208,15 +208,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     startPoint.setLongitude(19.804043);
 
                     Location endPoint=new Location("locationA");
-                    getDeviceCoordinates();
-                    endPoint.setLatitude(currentLocation1.getLatitude());
-                    endPoint.setLongitude(currentLocation1.getLongitude());
+                    try {
+                        getDeviceCoordinates();
+                        endPoint.setLatitude(currentLocation1.getLatitude());
+                        endPoint.setLongitude(currentLocation1.getLongitude());
 
-                    double distance=startPoint.distanceTo(endPoint);
+                        double distance=startPoint.distanceTo(endPoint);
 
-                    String nova = new DecimalFormat("#.##").format(distance/1000);
+                        String nova = new DecimalFormat("#.##").format(distance/1000);
 
-                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                    }catch(Exception e){
+                        Toast.makeText(MapActivity.this, "Ukljucite lokaciju", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 } else if (id_usluge == 1) {
                     moveCamera(new LatLng(45.246394, 19.834467), DEFAULT_ZOOM,
                             "Words and Friends");
@@ -225,15 +231,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     startPoint.setLongitude(19.834467);
 
                     Location endPoint=new Location("locationA");
-                    getDeviceCoordinates();
-                    endPoint.setLatitude(currentLocation1.getLatitude());
-                    endPoint.setLongitude(currentLocation1.getLongitude());
+                    try {
+                        getDeviceCoordinates();
+                        endPoint.setLatitude(currentLocation1.getLatitude());
+                        endPoint.setLongitude(currentLocation1.getLongitude());
 
-                    double distance=startPoint.distanceTo(endPoint);
+                        double distance=startPoint.distanceTo(endPoint);
 
-                    String nova = new DecimalFormat("#.##").format(distance/1000);
+                        String nova = new DecimalFormat("#.##").format(distance/1000);
 
-                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                    }catch(Exception e){
+                        Toast.makeText(MapActivity.this, "Ukljucite lokaciju", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 } else if (id_usluge == 2) {
                     moveCamera(new LatLng(44.805339, 20.473941), DEFAULT_ZOOM,
                             "Privatni casovi matematike");
@@ -242,15 +254,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     startPoint.setLongitude(20.473941);
 
                     Location endPoint=new Location("locationA");
-                    getDeviceCoordinates();
-                    endPoint.setLatitude(currentLocation1.getLatitude());
-                    endPoint.setLongitude(currentLocation1.getLongitude());
 
-                    double distance=startPoint.distanceTo(endPoint);
+                    try {
+                        getDeviceCoordinates();
+                        endPoint.setLatitude(currentLocation1.getLatitude());
+                        endPoint.setLongitude(currentLocation1.getLongitude());
 
-                    String nova = new DecimalFormat("#.##").format(distance/1000);
+                        double distance=startPoint.distanceTo(endPoint);
 
-                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                        String nova = new DecimalFormat("#.##").format(distance/1000);
+
+                        Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                    }catch(Exception e){
+                        Toast.makeText(MapActivity.this, "Ukljucite lokaciju", Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
                 else if (id_usluge == 3) {
                     moveCamera(new LatLng(45.240344, 19.832929), DEFAULT_ZOOM,
@@ -260,15 +279,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     startPoint.setLongitude(19.832929);
 
                     Location endPoint=new Location("locationA");
-                    getDeviceCoordinates();
-                    endPoint.setLatitude(currentLocation1.getLatitude());
-                    endPoint.setLongitude(currentLocation1.getLongitude());
+                    try {
+                        getDeviceCoordinates();
+                        endPoint.setLatitude(currentLocation1.getLatitude());
+                        endPoint.setLongitude(currentLocation1.getLongitude());
 
-                    double distance=startPoint.distanceTo(endPoint);
+                        double distance=startPoint.distanceTo(endPoint);
 
-                    String nova = new DecimalFormat("#.##").format(distance/1000);
+                        String nova = new DecimalFormat("#.##").format(distance/1000);
 
-                    Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapActivity.this,"Udaljenost od Vas je: "+  nova + " km",Toast.LENGTH_SHORT).show();
+                    }catch(Exception e){
+                        Toast.makeText(MapActivity.this, "Ukljucite lokaciju", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
 

@@ -248,7 +248,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                brojac++;
                                if(brojac==1) {
                                    User u = ds.getValue(User.class);
-                                   Toast.makeText(getActivity(),"Promenili ste lozinku sa "+u.getPass()+" na "+etp2.getText(),Toast.LENGTH_LONG).show();
+                                   //Toast.makeText(getActivity(),"Promenili ste lozinku sa "+u.getPass()+" na "+etp2.getText(),Toast.LENGTH_LONG).show();
                                    FirebaseDatabase.getInstance().getReference("Korisnici").child(ds.getKey()).removeValue();
                                    u.setPass(etp2.getText());
                                    FirebaseDatabase.getInstance().getReference("Korisnici").push().setValue(u);
@@ -324,7 +324,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             @Override
                             public boolean onPreferenceChange(Preference preference, Object newValue) {
                                 userSelectedValue = (String) newValue;
-                                Toast.makeText(getActivity(),"SELEKTOVANO:"+userSelectedValue,Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getActivity(),"SELEKTOVANO:"+userSelectedValue,Toast.LENGTH_SHORT).show();
                                 setAlarmForReservations(getActivity(),userSelectedValue);
 
                                 return true;
@@ -528,7 +528,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     intent.putExtra("vreme",lista.get(i).getT().getVreme());
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(c11, i, intent, 0);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        Toast.makeText(c11, lista.get(i).getT().getVreme(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(c11, lista.get(i).getT().getVreme(), Toast.LENGTH_SHORT).show();
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                     }}
 

@@ -171,8 +171,6 @@ public class ProsleRezervacije extends Fragment {
 
                     Rezervacija r = ds.getValue(Rezervacija.class);
                     boolean insert = rezervacijeDatabaseHandler.addRezervacija(r);
-                    if(insert){Toast.makeText(getContext(),"USPESNO UNETO",Toast.LENGTH_SHORT).show();}
-                    else{Toast.makeText(getContext(),"NIJE UNETO",Toast.LENGTH_SHORT).show();}
 
                 }
             }
