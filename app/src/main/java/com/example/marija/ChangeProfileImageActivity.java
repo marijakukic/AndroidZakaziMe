@@ -2,6 +2,7 @@ package com.example.marija;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,7 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
     DatabaseHandler databaseHandler;
     User u;
     StorageReference photoRef;
+    String image_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,26 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        if (imguri != null)
+            savedInstanceState.putString("path_to_picture", imguri.toString());
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+
+        image_path = savedInstanceState.getString("path_to_picture");
+        if (image_path != null) {
+            Uri myUri = Uri.parse(image_path);
+            imguri = myUri;
+            profilna.setImageURI(myUri);
+        }
+
+    }
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -185,6 +207,7 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null) {
+
             imguri=data.getData();
             profilna.setImageURI(imguri);
         }

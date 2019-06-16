@@ -126,6 +126,8 @@
                 android:id="@+id/profilnaSlika"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="30dp"
                 android:layout_below="@+id/izaberiSliku"/>
 
             <Button

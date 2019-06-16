@@ -65,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
     String entrykorname ;
     String entryMail ;
     String entryPass ;
-    String entryPrezime ;
+    String entryPrezime ,image_path;
     private boolean korisnikPostoji;
     private StorageReference mStorageRef;
     private ImageView profilna;
@@ -167,6 +167,53 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }
             });
+
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        if (imguri != null)
+            savedInstanceState.putString("path_to_picture", imguri.toString());
+        savedInstanceState.putString("ime", mImeView.getText().toString());
+        savedInstanceState.putString("prezime", mPrezimeView.getText().toString());
+        savedInstanceState.putString("kor_ime", mKorisnickoImeView.getText().toString());
+        savedInstanceState.putString("email", mEmailView.getText().toString());
+        savedInstanceState.putString("lozinka", mPasswordView.getText().toString());
+        savedInstanceState.putString("lozinka2", mPasswordConfirmedView.getText().toString());
+
+
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+
+        image_path = savedInstanceState.getString("path_to_picture");
+        if (image_path != null) {
+            Uri myUri = Uri.parse(image_path);
+            imguri = myUri;
+            profilna.setImageURI(myUri);
+        }
+        if (savedInstanceState.getString("ime") != null)
+            mImeView.setText(savedInstanceState.getString("ime"));
+
+        if (savedInstanceState.getString("prezime") != null)
+            mPrezimeView.setText(savedInstanceState.getString("prezime"));
+
+        if (savedInstanceState.getString("kor_ime") != null)
+            mKorisnickoImeView.setText(savedInstanceState.getString("kor_ime"));
+
+        if (savedInstanceState.getString("lozinka") != null)
+            mPasswordView.setText(savedInstanceState.getString("lozinka"));
+
+        if (savedInstanceState.getString("lozinka2") != null)
+            mPasswordConfirmedView.setText(savedInstanceState.getString("lozinka2"));
+
+        if (savedInstanceState.getString("email") != null)
+            mEmailView.setText(savedInstanceState.getString("email"));
+
+
+
 
     }
     public String getURLForResource (int resourceId) {
