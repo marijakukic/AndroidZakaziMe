@@ -48,8 +48,8 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_profile_image);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         setupActionBar();
         mStorageRef = FirebaseStorage.getInstance().getReference("Korisnici");
         mFirebaseStorage = FirebaseStorage.getInstance().getReference("Korisnici").getStorage();
@@ -68,8 +68,8 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
         databaseHandler = new DatabaseHandler(ChangeProfileImageActivity.this);
         u = databaseHandler.findUser();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +121,8 @@ public class ChangeProfileImageActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
+    
 
     @Override
     public boolean onSupportNavigateUp() {

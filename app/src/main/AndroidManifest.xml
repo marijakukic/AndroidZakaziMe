@@ -16,10 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ChangeProfileImageActivity"
-            android:label="@string/title_activity_change_profile_image"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -34,8 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MojaZakazivanjaActivity"
-            android:label="@string/title_activity_moja_zakazivanja"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Moja zakazivanja" />
         <activity android:name=".ListItemActivity" />
         <activity
             android:name=".RegisterActivity"
@@ -44,6 +39,9 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name=".ChangeProfileImageActivity"
+            android:label="Izmena profilne slike" />
         <activity
             android:name=".LoginActivity"
             android:label="Zakazi me">

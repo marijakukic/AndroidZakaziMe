@@ -223,17 +223,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     public void addTerminiToFirebase(){
-//        Termin t = new Termin(789,"30.06.2019.","17:00",true,1);
-//        Termin t1 = new Termin(788,"30.06.2019.","08:00",true,0);
-//        Termin t2 = new Termin(787,"28.06.2019.","20:30",true,2);
-//        Termin t3 = new Termin(786,"29.06.2019.","16:00",true,2);
-        Termin t4 = new Termin(7858,"09.06.2019.","16:15",true,3);
-
+//        Termin t = new Termin(889,"17.06.2019.","14:00",true,1);
+//        Termin t1 = new Termin(888,"17.06.2019.","13:00",true,0);
+//        Termin t2 = new Termin(887,"28.06.2019.","15:30",true,2);
+//        Termin t3 = new Termin(886,"29.06.2019.","16:00",true,2);
+//        Termin t4 = new Termin(845,"18.06.2019.","16:15",true,3);
+//        Termin t5 = new Termin(846,"17.06.2019.","12:30",true,0);
+        Termin tt = new Termin(8466,"16.06.2019.","13:45",true,0);
+//
 //        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t);
 //        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t1);
 //        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t2);
 //        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t3);
-        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t4);
+//        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t4);
+//        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(t5);
+
+        FirebaseDatabase.getInstance().getReference("Termini").push().setValue(tt);
 
 
 
